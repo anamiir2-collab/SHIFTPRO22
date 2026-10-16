@@ -4,7 +4,7 @@
    - runtime: network-first for navigations, cache-first for static assets
    - cleanup: drop old caches on activate
 */
-const SW_VERSION = 'shifpro-v2.7.0-nova-local';
+const SW_VERSION = 'shifpro-v2.8.0-nova-labor-law';
 const APP_SHELL = [
   './',
   './index.html',
