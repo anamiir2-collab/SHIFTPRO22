@@ -290,21 +290,24 @@ After deploying, verify these flows:
 
 ### Recent work
 - **NOVA (نوفا):** animated robot icon, personal introduction, employee-name greeting, periodic help bubble, Arabic/English UI, suggested prompts, and local-first command handling.
-- **Local actions without API:** the goal is to connect NOVA to ShiftPro's own JavaScript functions. Current support is a starter prototype and does not yet cover every feature.
+- **Egyptian Labor Law integration:** NOVA now searches the law dataset already loaded by ShiftPro (`window.__LAW__`) and returns up to three matching article excerpts with article/book/chapter labels. This lookup works locally without an AI API and warns users to verify the full official text; it is text retrieval, not legal advice.
+- **Local actions without API:** NOVA has starter commands plus local legal-text search. It still does not execute every ShiftPro feature and should not invent a legal answer when no relevant passage is found.
 - **Smart Wallet:** wallets should be user-defined (name, amount, and what each wallet covers), without forced percentage splits or mandatory preset categories. ShiftPro should organize and monitor the user's choices.
 - **Optional AI backend:** Cloudflare Worker scaffold for server-side API calls, plus a development-only browser key entry path.
 - **PWA refresh:** assistant stylesheet version and service-worker cache key updated for the latest files.
 
 ### Next tasks
-1. Connect NOVA to real application functions for shifts/calendar, attendance, salary, reports, wallets, profile, and settings.
-2. Require confirmation for sensitive writes/deletes and verify the action succeeded before telling the user it did.
-3. Add tests for Arabic/English command variants, unavailable controls, cancelled confirmations, unknown commands, offline mode, and API/CORS failures.
-4. Deploy and test the optional Worker end-to-end before enabling external chat for public users.
-5. Review privacy and Google Play disclosures before public release.
+1. Connect NOVA to more real application functions for shifts/calendar, attendance, salary, reports, wallets, profile, and settings.
+2. Improve legal search relevance and test common questions against the loaded articles; make sure every answer points to the right provision and review the dataset for updates.
+3. Require confirmation for sensitive writes/deletes and verify the action succeeded before telling the user it did.
+4. Add tests for Arabic/English command variants, unavailable controls, cancelled confirmations, unknown commands, offline mode, and API/CORS failures.
+5. Deploy and test the optional Worker end-to-end before enabling external chat for public users.
+6. Review privacy and Google Play disclosures before public release.
 
 ## 📜 Version History
 
-- **v2.7.0 assistant prototype** — NOVA assistant UI, starter local commands, optional CodeCraft/Worker integration scaffold, and refreshed service-worker cache.
+- **v2.8.0 NOVA + labor law search** — local search across the embedded Egyptian Labor Law dataset, relevant article excerpts, and refreshed service-worker cache.
+- **v2.7.0 assistant prototype** — NOVA assistant UI, starter local commands, optional CodeCraft/Worker integration scaffold.
 - **v2.5.2** — Premium Navy redesign, Arabic-first default, General Settings fix, welcome card + merged clock, settings section reorganization, dark mode palette, refined animations.
 - **v2.2.0** — iOS-style refresh, hybrid storage migration, official holidays, smart notifications.
 - **v2.1.0** — Leave management, iCal export, undo/redo.
