@@ -37,6 +37,53 @@
     if(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p===page));return true}
     return false;
   }
+  function lawAnswer(message){
+    const law=global.__LAW__;
+    if(!law||!Array.isArray(law.books))return null;
+    const m=normalize(message);
+    const lawIntent=/(قانون العمل|ماده|مواد القانون|اجازه|الاجازات|اجازات|الاجازة|اجازات|فصل تعسفي|فصل من العمل|استقاله|عقد العمل|ساعات العمل|ساعات الشغل|فتره الراحه|الراحه الاسبوعيه|الاجر|الاجور|الحد الادني|مكافاه نهايه الخدمه|التامينات|تعويض|تشغيل العمال|اجازة|الإجازة|المرضي|المرضيه|annual leave|labor law|labour law|employment contract|working hours|overtime|severance|dismissal|resignation|wages?)/i;
+    if(!lawIntent.test(m))return null;
+    const records=[];
+    (law.preamble||[]).forEach(item=>{
+      const body=Array.isArray(item.text)?item.text.join(' '):String(item.text||'');
+      records.push({title:item.title||'مواد الإصدار',body,kind:'preamble'});
+    });
+    function addArticles(items,bookName,chapterName,sectionName){
+      (items||[]).forEach(item=>{
+        const paras=item.paras||item.text||item.content||[];
+        const body=Array.isArray(paras)?paras.join(' '):String(paras||'');
+        if(body)records.push({title:'المادة '+(item.num??item.number??item.title??''),body,bookName,chapterName,sectionName,num:item.num??item.number});
+      });
+    }
+    (law.books||[]).forEach(book=>{
+      addArticles(book.articles,book.name||book.title,'','');
+      (book.chapters||[]).forEach(chapter=>{
+        addArticles(chapter.articles,book.name||book.title,chapter.name||chapter.label,'');
+        (chapter.sections||[]).forEach(section=>{
+          addArticles(section.articles,book.name||book.title,chapter.name||chapter.label,section.name||section.label);
+        });
+      });
+    });
+    const stop=new Set(['في','من','على','عن','الى','الي','هل','ما','هو','هي','ايه','اي','كم','كيف','متى','ماذا','هل','قانون','العمل','المصري','المصريه','ماده','الماده','مواد','بخصوص','حسب','طبقا','وفقا','the','what','is','are','how','can','i','my','in','of','to','for','egyptian','labor','labour','law']);
+    const tokens=m.split(/[^\p{L}\p{N}]+/u).filter(t=>t.length>1&&!stop.has(t));
+    if(!tokens.length)return tr('اكتب موضوعًا محددًا أو رقم المادة التي تريد البحث عنها في قانون العمل.','Ask about a specific labor-law topic or provide an article number.');
+    const ranked=records.map(rec=>{
+      const text=normalize(rec.title+' '+rec.body+' '+(rec.bookName||'')+' '+(rec.chapterName||'')+' '+(rec.sectionName||''));
+      let score=0;
+      tokens.forEach(token=>{if(text.includes(token))score+=token.length>4?2:1});
+      const numMatch=m.match(/(?:الماده|ماده|article)\s*(\d+)/i);
+      if(numMatch&&String(rec.num||'')===numMatch[1])score+=20;
+      return {...rec,score};
+    }).filter(x=>x.score>0).sort((x,y)=>y.score-x.score).slice(0,3);
+    if(!ranked.length)return tr('ملقتش مادة واضحة مطابقة لسؤالك في نسخة القانون الموجودة بالتطبيق. جرّب كلمات أدق أو رقم المادة، ومش هخمن إجابة قانونية من غير نص مناسب.','I could not find a clear matching provision in the law text bundled with the app. Try more specific keywords or an article number; I will not guess a legal answer without a matching source.');
+    const heading=tr('نتائج من نص قانون العمل المصري رقم 14 لسنة 2025:','Results from the Egyptian Labor Law No. 14 of 2025:');
+    const results=ranked.map(rec=>{
+      const snippet=rec.body.length>650?rec.body.slice(0,647).trim()+'…':rec.body;
+      const meta=[rec.bookName,rec.chapterName,rec.sectionName].filter(Boolean).join(' — ');
+      return (rec.title||tr('نص قانوني','Legal text'))+(meta?' ('+meta+')':'')+'\n'+snippet;
+    });
+    return heading+'\n\n'+results.join('\n\n')+'\n\n'+tr('تنبيه: ده استرجاع من النص المرفق بالتطبيق وليس استشارة قانونية. راجع النص الكامل والسياق والتعديلات الرسمية قبل اتخاذ قرار.','Note: This is retrieval from the law text bundled with the app, not legal advice. Check the full provision, context, and official amendments before acting.');
+  }
   function localAction(message){
     const m=normalize(message);
     const openWords=['افتح','روح','انتقل','اعرض','اذهب','open','go to','show','view'];
@@ -114,7 +161,7 @@
       event.preventDefault();if(busy)return;const message=input.value.trim();if(!message)return;
       if(message.length>MAX_MESSAGE){addMessage(messages,'assistant',tr('الطلب طويل جدًا. اختصره من فضلك.','That request is too long. Please shorten it.'));return}
       addMessage(messages,'user',message);input.value='';
-      const localReply=localAction(message);
+      const legalReply=lawAnswer(message);\n      if(legalReply){addMessage(messages,'assistant',legalReply);return}\n      const localReply=localAction(message);
       if(localReply){addMessage(messages,'assistant',localReply);return}
       const key=getLocalApiKey(),endpoint=getEndpoint();
       if(!key&&(!endpoint||endpoint.includes('YOUR-WORKER.workers.dev'))){addMessage(messages,'assistant',tr('أنا نوفا يا '+workerName()+' 😊 الأمر ده مش من الأوامر المحلية اللي اتعرفت عليها لسه. جرّب فتح قسم أو طلب ملخص. تقدر تستخدم الوظائف المدعومة بدون API، أما فهم الطلبات العامة فمحتاج ربط اختياري.','I’m NOVA 😊 I don’t recognize that as a local command yet. Try opening a section or asking for a summary. Supported actions work without an API; general language understanding needs an optional connection.'));return}
