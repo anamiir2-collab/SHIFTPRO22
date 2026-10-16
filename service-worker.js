@@ -4,7 +4,7 @@
    - runtime: network-first for navigations, cache-first for static assets
    - cleanup: drop old caches on activate
 */
-const SW_VERSION = 'shifpro-v2.5.3-wallet';
+const SW_VERSION = 'shifpro-v2.6.0-ai-assistant';
 const APP_SHELL = [
   './',
   './index.html',
@@ -14,6 +14,7 @@ const APP_SHELL = [
   './css/ios-style.css',
   './css/law-reader.css',
   './css/wallet.css',
+  './css/ai-assistant.css',
   // ملفات i18n (مهمة للتشغيل الأول)
   './locales/ar.js',
   './locales/en.js',
@@ -44,6 +45,7 @@ const APP_SHELL = [
   './js/wallet.js',
   './js/wallet-forms.js',
   './js/wallet-reports.js',
+  './js/ai-assistant.js',
   './js/app.js',
   // ====== Egyptian Labor Law dataset + reader ======
   // Dataset: order matters only at runtime (script tags in index.html);
