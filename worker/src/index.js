@@ -1,6 +1,6 @@
 /**
  * ShiftPro AI Assistant backend scaffold (Cloudflare Workers).
- * Configure OPENAI_API_KEY as a Worker secret; never put it in frontend files.
+ * Configure CODECRAFT_API_KEY as a Worker secret; never put it in frontend files.
  * Configure ALLOWED_ORIGIN to the exact deployed app origin, e.g.
  * https://anamiir2-collab.github.io
  */
@@ -66,29 +66,32 @@ export default {
     ].join("\n");
 
     try {
-      const upstream = await fetch("https://api.openai.com/v1/responses", {
+      const upstream = await fetch("https://codecraftapi.com/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": "Bearer " + env.OPENAI_API_KEY,
+          "Authorization": "Bearer " + env.CODECRAFT_API_KEY,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: env.OPENAI_MODEL || "gpt-4.1-mini",
-          instructions: systemPrompt,
-          input: message,
-          max_output_tokens: 500,
-          store: false
+          model: env.CODECRAFT_MODEL || "claude-opus-4.8",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: message }
+          ],
+          max_tokens: 500,
+          stream: false
         })
       });
 
       const result = await upstream.json().catch(() => ({}));
       if (!upstream.ok) {
-        // Do not forward upstream details, request IDs, or secrets to the client.
-        console.error("OpenAI request failed with status", upstream.status);
+        console.error("CodeCraft API request failed with status", upstream.status);
         return json({ error: upstream.status === 429 ? "rate_limited" : "upstream_error" }, upstream.status === 429 ? 429 : 502, origin);
       }
 
-      const reply = typeof result.output_text === "string" ? result.output_text.trim() : "";
+      const reply = typeof result.choices?.[0]?.message?.content === "string"
+        ? result.choices[0].message.content.trim()
+        : "";
       if (!reply) return json({ error: "empty_reply" }, 502, origin);
       return json({ reply }, 200, origin);
     } catch (error) {
