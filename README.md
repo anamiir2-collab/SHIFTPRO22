@@ -1,14 +1,26 @@
-# ShiftPro v2.5.2 — Premium Navy Edition
+# ShiftPro — Shift Management & Smart Wallet PWA
 
 تطبيق متكامل لإدارة الورديات والحضور وساعات العمل والرواتب — **تجربة عربية أولاً**، يعمل بدون إنترنت، قابل للتثبيت (PWA) على Android و iOS و Desktop.
 
 A complete shift-management, attendance, and salary-tracking PWA. **Arabic-first**, RTL by default, with English as a secondary language. Works fully offline after first load.
 
-## Current Version: v2.5.2
+## Current Project Status
 
-- Aligned the app version displayed in About and the splash screen with `package.json`.
-- Updated CSS/JavaScript cache-busting query strings and the Service Worker cache key so browsers refresh assets consistently.
-- Aligned exported report/calendar metadata and stored app-version metadata with v2.5.2.
+The repository has recently been updated with the **NOVA (نوفا) assistant prototype**, its animated floating robot UI, local-first command handling, optional CodeCraft API/Cloudflare Worker integration scaffolding, and a refreshed service-worker cache version.
+
+> **Important:** NOVA is still an early implementation. Local commands currently cover only a small set of actions (navigation, visible summary values, and confirmation-gated attendance/check-out buttons when those controls are available). This does **not** mean every app feature can already be controlled by NOVA. Verify each command in the deployed app before relying on it.
+
+### Recent updates
+- Added `js/ai-assistant.js` for NOVA, welcome message, help nudges, bilingual labels, quick prompts, local command routing, and optional external chat requests.
+- Added `css/ai-assistant.css` for the animated robot, chat panel, message bubbles, suggestion chips, responsive layout, and reduced-motion support.
+- Added `worker/src/index.js`, `worker/wrangler.toml`, `worker/package.json`, and `worker/README.md` as the optional Cloudflare Worker backend scaffold.
+- Updated `index.html` to refresh the assistant stylesheet version.
+- Updated `service-worker.js` cache key to `shifpro-v2.7.0-nova-local` so the browser can fetch the latest assistant assets.
+- Assistant UI supports Arabic and English and greets the employee by name when the name is available in the page.
+- Added an optional local browser test-key setting for CodeCraft. A key entered there is stored in that browser's `localStorage`; it is **not committed to the repository**, but it is still accessible to someone who can inspect that browser profile. Prefer a disposable, low-limit test key only.
+- Refreshed the smart-wallet and app documentation so the project structure and current limitations are explicit.
+
+**Live API status:** The CodeCraft direct-browser request and Cloudflare Worker route have not been confirmed end-to-end in production. Browser CORS restrictions may block direct requests; the Worker requires deployment and a server-side `CODECRAFT_API_KEY` secret.
 
 ---
 
@@ -89,10 +101,10 @@ Dark mode is **carefully crafted** — not pure black; cards stay distinguishabl
 ## 📁 Project Structure
 
 ```
-SHIFTPRO1/
+SHIFTPRO22/
 ├── index.html              # Main page structure (Dashboard / Calendar / Salary / Reports / More)
 ├── manifest.json           # PWA manifest (Arabic, RTL, navy theme)
-├── service-worker.js       # Offline cache (v2.5.2)
+├── service-worker.js       # Offline app shell cache + cache-version invalidation
 ├── README.md               # This file
 ├── .gitignore              # Git ignore rules
 ├── package.json            # Project metadata
@@ -101,9 +113,12 @@ SHIFTPRO1/
 ├── icon-512.png            # PWA icon 512×512
 ├── apple-touch-icon.png    # iOS touch icon 180×180
 ├── css/
-│   ├── style.css           # Premium Navy palette, all component styles, dark mode
-│   ├── ios-style.css       # iOS-inspired layer (now inherits from --sp-* tokens)
-│   └── animations.css      # Entrance animations, sheet transitions, reduced-motion guard
+│   ├── style.css           # Core UI, Premium Navy palette, dark mode
+│   ├── ios-style.css       # iOS-inspired layer (inherits from --sp-* tokens)
+│   ├── animations.css      # Entrance animations, transitions, reduced-motion guard
+│   ├── wallet.css          # Smart Wallet interface
+│   ├── law-reader.css      # Egyptian Labor Law reader styles
+│   └── ai-assistant.css    # NOVA robot and assistant chat UI
 ├── js/
 │   ├── utils.js            # Helpers: date, Hijri, format, toast, confirmDialog
 │   ├── storage.js          # localStorage layer with v1 → v2 migration
@@ -115,6 +130,7 @@ SHIFTPRO1/
 │   ├── salary.js           # Salary + overtime + deductions + bonuses
 │   ├── reports.js          # Reports + charts + CSV/JSON/print
 │   ├── settings.js         # Settings + shifts + leaves + stats + backup
+│   ├── welcome-messages.js # Time-based/contextual welcome messages
 │   ├── shift-templates.js # Shift templates + smart repeat
 │   ├── leaves.js           # Leave management
 │   ├── charts.js           # Donut + bar chart rendering
@@ -126,6 +142,11 @@ SHIFTPRO1/
 │   ├── ical-export.js      # iCal feed export
 │   ├── pdf-export.js       # PDF report generation
 │   └── app.js              # Main coordinator (dashboard, splash, PWA)
+├── worker/                 # Optional Cloudflare Worker backend for AI chat
+│   ├── src/index.js        # API proxy with origin/message validation
+│   ├── wrangler.toml       # Worker deployment settings
+│   ├── package.json        # Wrangler scripts/dependency
+│   └── README.md           # Worker setup and security notes
 ├── locales/
 │   ├── ar.js               # Arabic dictionary (default)
 │   ├── en.js               # English dictionary
@@ -172,7 +193,7 @@ You can also just double-click `index.html` to open it via `file://`, but the se
 
 ### Step-by-step
 
-1. **Create a new GitHub repository** (e.g. `SHIFTPRO1`), or use the existing one at `anamiir2-collab/SHIFTPRO1`.
+1. **Create a new GitHub repository** (e.g. `SHIFTPRO1`), or use the existing one at `anamiir2-collab/SHIFTPRO22`.
 
 2. **Push the project files to the repository root:**
    ```bash
@@ -221,10 +242,12 @@ After deploying, verify these flows:
 
 ## 🛡️ Privacy & Security
 
-- **All data is local** — attendance, salary, settings, and leaves are stored in `localStorage` and IndexedDB on the user's device. Nothing is ever sent to any server.
-- **No analytics, no tracking** — the app makes no outbound requests except the initial Google Fonts CDN (which degrades gracefully to system fonts if blocked).
-- **No API keys or secrets** — the project contains no API keys, passwords, access tokens, or any sensitive credentials.
-- **PWA offline** — after the first load, the service worker caches the app shell. The app continues to work without an internet connection.
+- **Core app data:** attendance, salary, settings, and leave data are designed to remain on the user's device using browser storage/IndexedDB, unless a feature explicitly exports or shares it.
+- **Optional assistant requests:** if NOVA is configured to use CodeCraft or a deployed Worker, the text sent to the assistant leaves the device and is processed by that service. Do not send sensitive employee or payroll details unless you understand the provider's privacy terms.
+- **Local test key:** the experimental direct-browser mode stores the entered CodeCraft key in this browser's `localStorage`. This keeps the key out of Git commits, but does **not** make it secret from people or extensions able to inspect the browser profile. Use a disposable, low-limit test key and remove it from browser storage when finished.
+- **Production setup:** prefer the Cloudflare Worker approach and store `CODECRAFT_API_KEY` as a Worker secret. Never put a production key in frontend JavaScript, HTML, CSS, or committed files.
+- **No analytics are intentionally added by the assistant changes.** External resources such as Google Fonts and any explicitly configured AI endpoint may make network requests.
+- **Offline support:** the service worker caches the app shell and static assets. External AI chat requires network access; supported local app functions do not require an AI API.
 
 ---
 
