@@ -414,8 +414,8 @@
           walletId: w.id,
           walletName: w.name,
           message: (i18n && i18n.getLocale() === 'ar'
-            ? 'محفظة «' + w.name + '» برصيد سالب ' + U.fmtCurrency(s.balance)
-            : 'Wallet "' + w.name + '" has a negative balance: ' + U.fmtCurrency(s.balance))
+            ? 'محفظة «' + w.name + '» برصيد سالب ' + fmtWalletCurrency(s.balance)
+            : 'Wallet "' + w.name + '" has a negative balance: ' + fmtWalletCurrency(s.balance))
         });
       }
     });
@@ -835,6 +835,8 @@
   // UI: Dashboard rendering
   // =========================================================
   let activeSubPage = 'dashboard'; // dashboard | reports | export
+  let balancesHidden = false;
+  function fmtWalletCurrency(value) { return balancesHidden ? '••••••' : U.fmtCurrency(value); }
   let activeWalletId = null; // when viewing wallet details
   let activePeriodKey = null; // for reports (defaults to current)
 
@@ -897,6 +899,16 @@
       ]),
       el('div', { class: 'wallet-actions' }, [
         el('button', {
+          class: 'wallet-icon-btn wallet-balance-toggle',
+          'data-i18n-aria': balancesHidden ? 'wallet.show_balances' : 'wallet.hide_balances',
+          'aria-label': t(balancesHidden ? 'wallet.show_balances' : 'wallet.hide_balances'),
+          title: t(balancesHidden ? 'wallet.show_balances' : 'wallet.hide_balances'),
+          'aria-pressed': String(balancesHidden),
+          onclick: () => { balancesHidden = !balancesHidden; render(); }
+        }, [svgParse(balancesHidden
+          ? '<svg viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c5 0 8.5 4.5 9 7-.2 1-1 2.1-2.1 3.1"/><path d="M6.2 6.2C4.2 7.4 3.2 9.3 3 12c.3 1.8 1.6 3.6 4 5"/></svg>'
+          : '<svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>')]),
+        el('button', {
           class: 'wallet-icon-btn',
           'data-i18n-aria': 'wallet.suggest_btn',
           'aria-label': t('wallet.suggest_btn'),
@@ -944,13 +956,13 @@
       el('span', { class: 'period-pill' }, [periodLabel])
     ]));
     const grid = el('div', { class: 'wallet-summary-grid' });
-    grid.appendChild(summaryCell('wallet.net_salary', U.fmtCurrency(netSalary)));
-    grid.appendChild(summaryCell('wallet.total_allocated', U.fmtCurrency(allocated)));
-    grid.appendChild(summaryCell('wallet.total_expenses', U.fmtCurrency(totalExpenses)));
-    grid.appendChild(summaryCell('wallet.total_remaining', U.fmtCurrency(totalRemaining)));
+    grid.appendChild(summaryCell('wallet.net_salary', fmtWalletCurrency(netSalary)));
+    grid.appendChild(summaryCell('wallet.total_allocated', fmtWalletCurrency(allocated)));
+    grid.appendChild(summaryCell('wallet.total_expenses', fmtWalletCurrency(totalExpenses)));
+    grid.appendChild(summaryCell('wallet.total_remaining', fmtWalletCurrency(totalRemaining)));
     grid.appendChild(el('div', { class: 'wallet-summary-cell unallocated' }, [
       el('span', { class: 'lbl', 'data-i18n': 'wallet.unallocated' }, [t('wallet.unallocated')]),
-      el('span', { class: 'val ' + summaryCellCls }, [U.fmtCurrency(unallocated)])
+      el('span', { class: 'val ' + summaryCellCls }, [fmtWalletCurrency(unallocated)])
     ]));
     summary.appendChild(grid);
     if (overspent) {
@@ -1048,11 +1060,11 @@
     card.appendChild(head);
 
     const statsGrid = el('div', { class: 'wallet-card-stats' }, [
-      statCell('wallet.allocated', U.fmtCurrency(w.amount)),
-      statCell('wallet.spent', U.fmtCurrency(stats.expenses)),
+      statCell('wallet.allocated', fmtWalletCurrency(w.amount)),
+      statCell('wallet.spent', fmtWalletCurrency(stats.expenses)),
       el('div', { class: 'wallet-card-stat remaining' }, [
         el('span', { class: 'lbl', 'data-i18n': 'wallet.remaining' }, [t('wallet.remaining')]),
-        el('span', { class: 'val ' + remCls }, [U.fmtCurrency(stats.balance)])
+        el('span', { class: 'val ' + remCls }, [fmtWalletCurrency(stats.balance)])
       ])
     ]);
     card.appendChild(statsGrid);
@@ -1073,7 +1085,7 @@
     const details = el('details', { class: 'wallet-salary-settings' });
     const summary = el('summary', {}, [
       el('span', {}, [
-        t('wallet.net_salary') + ': ' + U.fmtCurrency(getNetSalary()) +
+        t('wallet.net_salary') + ': ' + fmtWalletCurrency(getNetSalary()) +
         ' · ' + (data.manualSalaryOn ? t('wallet.salary_source_manual') : t('wallet.salary_source_auto'))
       ])
     ]);
@@ -1192,11 +1204,11 @@
       ])
     ]));
     header.appendChild(el('div', { class: 'wallet-detail-stats' }, [
-      detailStat('wallet.original_allocation', U.fmtCurrency(w.amount), ''),
-      detailStat('wallet.spent', U.fmtCurrency(stats.expenses), ''),
-      detailStat('wallet.incoming_transfers', U.fmtCurrency(stats.transferIn), ''),
-      detailStat('wallet.outgoing_transfers', U.fmtCurrency(stats.transferOut), ''),
-      detailStat('wallet.balance', U.fmtCurrency(stats.balance), 'balance ' + balCls)
+      detailStat('wallet.original_allocation', fmtWalletCurrency(w.amount), ''),
+      detailStat('wallet.spent', fmtWalletCurrency(stats.expenses), ''),
+      detailStat('wallet.incoming_transfers', fmtWalletCurrency(stats.transferIn), ''),
+      detailStat('wallet.outgoing_transfers', fmtWalletCurrency(stats.transferOut), ''),
+      detailStat('wallet.balance', fmtWalletCurrency(stats.balance), 'balance ' + balCls)
     ]));
     page.appendChild(header);
 
@@ -1298,7 +1310,7 @@
       ])
     ]));
     item.appendChild(el('div', { class: 'wallet-tx-amount ' + iconKey },
-      [amountSign + ' ' + U.fmtCurrency(tx.amount)]));
+      [amountSign + ' ' + fmtWalletCurrency(tx.amount)]));
     const act = el('div', { class: 'wallet-tx-actions' });
     act.appendChild(el('button', {
       'aria-label': t('common.edit'),
