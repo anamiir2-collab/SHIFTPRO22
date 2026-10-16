@@ -141,7 +141,13 @@ SHIFTPRO22/
 │   ├── ux-enhancements.js  # UX polish (privacy mode, onboarding)
 │   ├── ical-export.js      # iCal feed export
 │   ├── pdf-export.js       # PDF report generation
-│   └── app.js              # Main coordinator (dashboard, splash, PWA)
+│   ├── app.js              # Main coordinator (dashboard, splash, PWA)
+│   ├── ai-assistant.js     # NOVA local commands + optional API chat
+│   ├── wallet.js           # Smart Wallet core
+│   ├── wallet-forms.js     # Smart Wallet entry forms
+│   ├── wallet-reports.js   # Smart Wallet reports and summaries
+│   ├── law-reader.js       # Egyptian Labor Law reader
+│   └── data/               # Labor Law dataset split into chapter files
 ├── worker/                 # Optional Cloudflare Worker backend for AI chat
 │   ├── src/index.js        # API proxy with origin/message validation
 │   ├── wrangler.toml       # Worker deployment settings
@@ -169,14 +175,14 @@ ShiftPro is a static site — no build step, no backend, no dependencies to inst
 
 ### Option 1: Python's built-in server (simplest)
 ```bash
-cd SHIFTPRO1
+cd SHIFTPRO22
 python3 -m http.server 8000
 ```
 Open http://localhost:8000/ in your browser.
 
 ### Option 2: Node's `serve` (if Node.js is installed)
 ```bash
-npx serve SHIFTPRO1
+npx serve SHIFTPRO22
 ```
 
 ### Option 3: VS Code Live Server extension
@@ -193,7 +199,7 @@ You can also just double-click `index.html` to open it via `file://`, but the se
 
 ### Step-by-step
 
-1. **Create a new GitHub repository** (e.g. `SHIFTPRO1`), or use the existing one at `anamiir2-collab/SHIFTPRO22`.
+1. **Create a new GitHub repository** (e.g. `SHIFTPRO22`), or use the existing one at `anamiir2-collab/SHIFTPRO22`.
 
 2. **Push the project files to the repository root:**
    ```bash
@@ -217,7 +223,7 @@ You can also just double-click `index.html` to open it via `file://`, but the se
    https://<your-username>.github.io/SHIFTPRO1/
    ```
 
-5. **For the existing repo** (`anamiir2-collab/SHIFTPRO1`), simply pushing the updated files to `main` will trigger a redeploy. The cache-busting version (`v=2.3.0` on all CSS/JS script tags) ensures GitHub Pages serves the latest version, not a stale cached one.
+5. **For the existing repo** (`anamiir2-collab/SHIFTPRO22`), simply pushing the updated files to `main` will trigger a redeploy. The cache-busting version (the current asset version on all CSS/JS script tags) ensures GitHub Pages serves the latest version, not a stale cached one.
 
 ### Notes on GitHub Pages specifics
 - GitHub Pages serves over HTTPS by default — perfect for service workers and PWA installation.
@@ -280,9 +286,26 @@ After deploying, verify these flows:
 
 ---
 
+## 🧭 Recent Tasks & Roadmap
+
+### Recent work
+- **NOVA (نوفا):** animated robot icon, personal introduction, employee-name greeting, periodic help bubble, Arabic/English UI, suggested prompts, and local-first command handling.
+- **Local actions without API:** the goal is to connect NOVA to ShiftPro's own JavaScript functions. Current support is a starter prototype and does not yet cover every feature.
+- **Smart Wallet:** wallets should be user-defined (name, amount, and what each wallet covers), without forced percentage splits or mandatory preset categories. ShiftPro should organize and monitor the user's choices.
+- **Optional AI backend:** Cloudflare Worker scaffold for server-side API calls, plus a development-only browser key entry path.
+- **PWA refresh:** assistant stylesheet version and service-worker cache key updated for the latest files.
+
+### Next tasks
+1. Connect NOVA to real application functions for shifts/calendar, attendance, salary, reports, wallets, profile, and settings.
+2. Require confirmation for sensitive writes/deletes and verify the action succeeded before telling the user it did.
+3. Add tests for Arabic/English command variants, unavailable controls, cancelled confirmations, unknown commands, offline mode, and API/CORS failures.
+4. Deploy and test the optional Worker end-to-end before enabling external chat for public users.
+5. Review privacy and Google Play disclosures before public release.
+
 ## 📜 Version History
 
-- **v2.5.2** (current) — Premium Navy redesign, Arabic-first default, General Settings fix, welcome card + merged clock, settings section reorganization, dark mode palette, refined animations.
+- **v2.7.0 assistant prototype** — NOVA assistant UI, starter local commands, optional CodeCraft/Worker integration scaffold, and refreshed service-worker cache.
+- **v2.5.2** — Premium Navy redesign, Arabic-first default, General Settings fix, welcome card + merged clock, settings section reorganization, dark mode palette, refined animations.
 - **v2.2.0** — iOS-style refresh, hybrid storage migration, official holidays, smart notifications.
 - **v2.1.0** — Leave management, iCal export, undo/redo.
 - **v2.0.0** — Complete rewrite with PWA support, dark mode, advanced reports.
