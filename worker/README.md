@@ -4,11 +4,11 @@ The ShiftPro frontend is hosted as a static GitHub Pages PWA. GitHub Pages canno
 
 ## Security rules
 
-- **Never** put `OPENAI_API_KEY` in `index.html`, JavaScript, CSS, GitHub Pages variables exposed to the browser, or any committed file.
-- The Worker reads the key from a Cloudflare secret.
+- **Never** put `CODECRAFT_API_KEY` in `index.html`, JavaScript, CSS, GitHub Pages variables exposed to the browser, or any committed file.
+- The Worker reads the CodeCraft API key from a Cloudflare secret.
 - Requests are limited to the `/api/assistant` endpoint, accept only POST/OPTIONS, validate the configured Origin, and limit messages to 2,000 characters.
 - The current version is **conversation-only**. It cannot access the app's local data or execute tasks. Do not describe it as task execution until an explicit allow-listed action layer with confirmation and tests has been implemented.
-- Before public launch, configure provider-side usage limits and add a durable rate limiter / abuse protection for the Worker.
+- Before public launch, configure CodeCraft API usage limits and add a durable rate limiter / abuse protection for the Worker.
 
 ## Deploy
 
@@ -17,7 +17,7 @@ The ShiftPro frontend is hosted as a static GitHub Pages PWA. GitHub Pages canno
    `wrangler login`
 2. From this folder, configure `ALLOWED_ORIGIN` in `wrangler.toml` to the exact origin of the deployed ShiftPro site. Do not add a trailing slash. For a GitHub Pages project site, the origin is typically `https://anamiir2-collab.github.io`.
 3. Add the API key as a Cloudflare Worker secret (run from this folder):
-   `wrangler secret put OPENAI_API_KEY`
+   `wrangler secret put CODECRAFT_API_KEY`
    Paste the key only into Wrangler's interactive prompt. Never commit it.
 4. Deploy:
    `wrangler deploy`
