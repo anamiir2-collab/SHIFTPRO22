@@ -7,7 +7,10 @@
   'use strict';
 
   const ENDPOINT_KEY = 'shiftpro_ai_endpoint';
+  const LOCAL_KEY = 'shiftpro_codecraft_api_key';
   const DEFAULT_ENDPOINT = 'https://YOUR-WORKER.workers.dev/api/assistant';
+  const CODECRAFT_URL = 'https://codecraftapi.com/v1/chat/completions';
+  const CODECRAFT_MODEL = 'claude-opus-4.8';
   const MAX_MESSAGE = 2000;
   let busy = false;
 
@@ -18,6 +21,11 @@
   function getEndpoint() {
     try { return (localStorage.getItem(ENDPOINT_KEY) || DEFAULT_ENDPOINT).trim(); }
     catch (_) { return DEFAULT_ENDPOINT; }
+  }
+
+  function getLocalApiKey() {
+    try { return (localStorage.getItem(LOCAL_KEY) || '').trim(); }
+    catch (_) { return ''; }
   }
 
   function make(tag, cls, text) {
@@ -81,10 +89,29 @@
     header.append(titleWrap, close);
 
     const notice = make('div', 'sp-ai-notice', tr(
-      'المساعد يحتاج إلى ربط خادم آمن قبل تفعيل الذكاء الاصطناعي. لا تضع أي مفتاح API هنا.',
-      'Connect a secure backend to enable AI. Never enter an API key here.'
+      'وضع التجربة المباشرة اختياري: المفتاح يُحفظ في هذا المتصفح فقط، لكنه سيكون قابلًا للاستخراج من المتصفح وقد ترفض الخدمة طلبات CORS. لا تستخدم مفتاحًا مهمًا أو عليه رصيد كبير.',
+      'Optional direct test mode: the key is stored only in this browser, but can be extracted from the browser and the API may block CORS. Use a disposable, low-limit test key only.'
     ));
     notice.id = 'spAiNotice';
+
+    const localKeyBtn = make('button', 'sp-ai-key-btn', tr('إعداد مفتاح التجربة على هذا الجهاز', 'Set local test API key'));
+    localKeyBtn.type = 'button';
+    localKeyBtn.addEventListener('click', () => {
+      const existing = getLocalApiKey();
+      const entered = global.prompt(tr('أدخل مفتاح CodeCraft التجريبي. لا تستخدم مفتاحًا مهمًا؛ سيتم حفظه في تخزين هذا المتصفح فقط.', 'Enter a disposable CodeCraft test key. It will be stored in this browser only.'), '');
+      if (entered === null) return;
+      if (!entered.trim()) {
+        try { localStorage.removeItem(LOCAL_KEY); } catch (_) {}
+        addMessage(messages, 'assistant', tr('تم مسح مفتاح التجربة المحلي من هذا المتصفح.', 'Local test key cleared from this browser.'));
+        return;
+      }
+      try {
+        localStorage.setItem(LOCAL_KEY, entered.trim());
+        addMessage(messages, 'assistant', tr('تم حفظ مفتاح التجربة محليًا. جرّب إرسال رسالة؛ قد تمنع الخدمة الاتصال المباشر من المتصفح.', 'Test key saved locally. Try sending a message; the provider may block direct browser requests.'));
+      } catch (_) {
+        addMessage(messages, 'assistant', tr('تعذر حفظ المفتاح في تخزين المتصفح.', 'Could not save the key in browser storage.'));
+      }
+    });
 
     const messages = make('div', 'sp-ai-messages');
     messages.id = 'spAiMessages';
@@ -123,7 +150,7 @@
       'Setup mode: this version does not change app data.'
     ));
 
-    panel.append(header, notice, messages, examples, form, footer);
+    panel.append(header, notice, localKeyBtn, messages, examples, form, footer);
     document.body.append(launcher, panel);
 
     launcher.addEventListener('click', () => panel.hidden ? openPanel(panel, input) : closePanel(panel, launcher));
@@ -140,8 +167,9 @@
       }
       addMessage(messages, 'user', message);
       input.value = '';
+      const localApiKey = getLocalApiKey();
       const endpoint = getEndpoint();
-      if (!endpoint || endpoint.includes('YOUR-WORKER.workers.dev')) {
+      if (!localApiKey && (!endpoint || endpoint.includes('YOUR-WORKER.workers.dev'))) {
         addMessage(messages, 'assistant', tr(
           'الواجهة جاهزة لكن الخادم لم يُربط بعد. انشر مجلد worker ثم ضع عنوانه في إعدادات الربط داخل ملف js/ai-assistant.js بدل العنوان التجريبي.',
           'The interface is ready, but the backend is not connected. Deploy the worker folder, then configure its URL in js/ai-assistant.js instead of the placeholder.'
@@ -151,14 +179,19 @@
       const waiting = addMessage(messages, 'assistant', tr('لحظة، بفهم طلبك…', 'Thinking…'));
       setBusy(true, send, input);
       try {
-        const response = await fetch(endpoint, {
+        const response = await fetch(localApiKey ? CODECRAFT_URL : endpoint, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message, locale: locale() })
+          headers: localApiKey
+            ? { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localApiKey }
+            : { 'Content-Type': 'application/json' },
+          body: JSON.stringify(localApiKey
+            ? { model: CODECRAFT_MODEL, messages: [{ role: 'user', content: message }], max_tokens: 500, stream: false }
+            : { message, locale: locale() })
         });
         const data = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(data.error || 'request_failed');
-        waiting.textContent = String(data.reply || tr('لم يصل رد واضح من المساعد.', 'The assistant returned no clear response.'));
+        if (!response.ok) throw new Error(data.error || data.message || 'request_failed');
+        const reply = localApiKey ? data.choices?.[0]?.message?.content : data.reply;
+        waiting.textContent = String(reply || tr('لم يصل رد واضح من المساعد.', 'The assistant returned no clear response.'));
       } catch (error) {
         waiting.textContent = tr(
           'تعذر الاتصال بالخادم. تأكد من نشره وضبط عنوان الموقع المسموح به، ثم حاول مرة أخرى.',
