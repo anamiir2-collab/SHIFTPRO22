@@ -205,21 +205,22 @@
   function linkify(s) {
     var out = escapeHtml(s);
 
-    /* المادة (N) */
-    out = out.replace(/المادة\s*\(\s*(\d+)\s*\)/g, function (m0, d) {
-      var n = +d;
-      return (n >= 1 && n <= statArticles)
-        ? '<a class="xref" href="#law/m' + n + '">المادة (' + toArabicNum(n) + ')</a>'
-        : m0;
-    });
-
-    /* المادة N من هذا القانون */
-    out = out.replace(/المادة\s+(\d+)\s+من هذا القانون/g, function (m0, d) {
-      var n = +d;
-      return (n >= 1 && n <= statArticles)
-        ? '<a class="xref" href="#law/m' + n + '">المادة ' + toArabicNum(n) + ' من هذا القانون</a>'
-        : m0;
-    });
+    /*
+     * Link legal cross-references in singular, dual and plural forms.
+     * Supports Arabic-Indic digits (٢٢), Latin digits (22), and lists
+     * such as "المادتين (٢٢، ٤١)" or "المواد 22 و41".
+     * Each number is linked only when that article exists in the loaded law.
+     */
+    out = out.replace(/((?:المادتين|المادتان|المادة|المواد)\s*(?:\(\s*)?)([٠-٩0-9]+(?:\s*(?:[,،؛]\s*|و\s*)[٠-٩0-9]+)*)(\s*\))?/g,
+      function (match, prefix, numbers, closing) {
+        var linkedNumbers = numbers.replace(/[٠-٩0-9]+/g, function (digits) {
+          var n = +toLatinNum(digits);
+          return HASH['m' + n] !== undefined
+            ? '<a class="xref" href="#law/m' + n + '">' + digits + '</a>'
+            : digits;
+        });
+        return prefix + linkedNumbers + (closing || '');
+      });
 
     /* المواد التمهيدية بأسماء العدد الترتيبي */
     for (var i = 0; i < ORDINALS.length; i++) {
