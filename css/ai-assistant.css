@@ -26,3 +26,10 @@
 @keyframes spRobotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes spRobotLook{0%,38%,100%{transform:rotate(0)}43%,50%{transform:rotate(-5deg)}58%,65%{transform:rotate(4deg)}}
 @media(max-width:480px){.sp-ai-panel{inset-inline:8px;bottom:calc(var(--tabbar-h,68px) + 76px);width:auto;height:min(70dvh,590px);min-height:320px}.sp-ai-launcher{inset-inline-end:14px;bottom:calc(var(--tabbar-h,68px) + 14px);width:52px;height:52px}.sp-ai-nudge{inset-inline-end:76px;bottom:calc(var(--tabbar-h,68px) + 22px)}}
 @media(prefers-reduced-motion:reduce){.sp-ai-launcher,.sp-ai-robot{animation:none!important;transition:none!important}}
+
+.sp-ai-voice{min-width:40px;min-height:42px;padding:0 8px;border:1px solid var(--border-color,rgba(120,140,160,.35));border-radius:12px;background:var(--card-bg,#fff);color:var(--text-color,#172033);cursor:pointer;font-size:17px}
+.sp-ai-voice.is-active{border-color:var(--brand-blue-light,#14b8a6);background:rgba(20,184,166,.12)}
+.sp-ai-voice.is-listening{border-color:#dc2626;background:rgba(220,38,38,.12);animation:spVoicePulse 1s ease-in-out infinite}
+.sp-ai-form{grid-template-columns:minmax(0,1fr) auto auto auto}
+@keyframes spVoicePulse{50%{box-shadow:0 0 0 5px rgba(220,38,38,.12)}}
+@media(max-width:380px){.sp-ai-voice{min-width:34px;padding:0 5px}.sp-ai-form{gap:5px}}
