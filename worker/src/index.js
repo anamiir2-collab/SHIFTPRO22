@@ -43,7 +43,7 @@ export default {
     if (request.method !== "POST") return json({ error: "method_not_allowed" }, 405, origin);
     if (!origin) return json({ error: "origin_not_allowed" }, 403, "");
 
-    if (!env.OPENAI_API_KEY) return json({ error: "ai_not_configured" }, 503, origin);
+    if (!env.CODECRAFT_API_KEY) return json({ error: "ai_not_configured" }, 503, origin);
     if (!env.ALLOWED_ORIGIN) return json({ error: "origin_not_configured" }, 503, origin);
 
     let body;
