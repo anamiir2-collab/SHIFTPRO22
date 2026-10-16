@@ -5,7 +5,7 @@
   const DEFAULT_ENDPOINT='https://YOUR-WORKER.workers.dev/api/assistant';
   const CODECRAFT_URL='https://codecraftapi.com/v1/chat/completions', CODECRAFT_MODEL='claude-opus-4.8';
   const MAX_MESSAGE=2000;
-  let busy=false, nudgeTimer=null, nudgeIndex=0;
+  let busy=false, nudgeTimer=null, nudgeIndex=0, voiceReplies=false, recognition=null;
   const locale=()=>global.SPi18n?global.SPi18n.getLocale():'ar';
   const isAr=()=>locale()!=='en';
   const tr=(ar,en)=>isAr()?ar:en;
@@ -17,7 +17,11 @@
   function getEndpoint(){try{return(localStorage.getItem(ENDPOINT_KEY)||DEFAULT_ENDPOINT).trim()}catch(_){return DEFAULT_ENDPOINT}}
   function getLocalApiKey(){try{return(localStorage.getItem(LOCAL_KEY)||'').trim()}catch(_){return ''}}
   function make(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n}
-  function addMessage(list,role,text){const row=make('div','sp-ai-message '+(role==='user'?'is-user':'is-assistant'),text);row.setAttribute('role','listitem');list.appendChild(row);list.scrollTop=list.scrollHeight;return row}
+  function speakText(text){
+    if(!voiceReplies||!global.speechSynthesis||!global.SpeechSynthesisUtterance)return;
+    try{global.speechSynthesis.cancel();const utterance=new global.SpeechSynthesisUtterance(String(text).slice(0,1800));utterance.lang=isAr()?'ar-EG':'en-US';utterance.rate=1;global.speechSynthesis.speak(utterance)}catch(_){}
+  }
+  function addMessage(list,role,text){const row=make('div','sp-ai-message '+(role==='user'?'is-user':'is-assistant'),text);row.setAttribute('role','listitem');list.appendChild(row);list.scrollTop=list.scrollHeight;if(role!=='user')speakText(text);return row}
   function setBusy(value,send,input){busy=value;send.disabled=value;input.disabled=value;send.textContent=value?'…':tr('إرسال','Send')}
   function openPanel(panel,input){panel.hidden=false;panel.classList.add('is-open');input.focus()}
   function closePanel(panel,launcher){panel.classList.remove('is-open');panel.hidden=true;launcher.focus()}
@@ -149,7 +153,21 @@
     const examples=make('div','sp-ai-examples');
     [tr('افتح التقارير','Open reports'),tr('افتح الراتب','Open salary'),tr('اعرض ملخص راتبي','Summarize my salary'),tr('اسأل عن قانون العمل','Ask about labor law'),tr('تسجيل حضور','Check in')].forEach(example=>{const b=make('button','',example);b.type='button';b.addEventListener('click',()=>{input.value=example;input.focus()});examples.appendChild(b)});
     const form=make('form','sp-ai-form'),input=make('textarea','sp-ai-input');input.id='spAiInput';input.rows=2;input.maxLength=MAX_MESSAGE;input.required=true;input.placeholder=tr('اكتب لنوفا هتحتاج إيه…','Tell NOVA what you need…');input.setAttribute('aria-label',input.placeholder);
-    const send=make('button','sp-ai-send',tr('إرسال','Send'));send.type='submit';form.append(input,send);
+    const voice=make('button','sp-ai-voice','🎙️');voice.type='button';voice.className='sp-ai-voice';voice.title=tr('تحدث وسيحوّل نوفا كلامك إلى نص','Speak to NOVA');voice.setAttribute('aria-label',voice.title);
+    const speak=make('button','sp-ai-voice','🔊');speak.type='button';speak.title=tr('تشغيل أو إيقاف الرد الصوتي','Toggle spoken replies');speak.setAttribute('aria-label',speak.title);speak.setAttribute('aria-pressed','false');
+    const send=make('button','sp-ai-send',tr('إرسال','Send'));send.type='submit';form.append(input,voice,speak,send);
+    speak.addEventListener('click',()=>{voiceReplies=!voiceReplies;speak.textContent=voiceReplies?'🔈':'🔊';speak.setAttribute('aria-pressed',String(voiceReplies));speak.classList.toggle('is-active',voiceReplies);if(!voiceReplies&&global.speechSynthesis)global.speechSynthesis.cancel();else speakText(tr('تم تشغيل الرد الصوتي','Spoken replies are now enabled'));});
+    voice.addEventListener('click',()=>{
+      const Recognition=global.SpeechRecognition||global.webkitSpeechRecognition;
+      if(!Recognition){addMessage(messages,'assistant',tr('المتصفح ده مش بيدعم تحويل الكلام لنص. جرّب Chrome المحدث أو اكتب طلبك.','Speech recognition is not supported in this browser. Try an updated Chrome browser or type your request.'));return;}
+      if(recognition){try{recognition.stop()}catch(_){}recognition=null;voice.classList.remove('is-listening');return;}
+      recognition=new Recognition();recognition.lang=isAr()?'ar-EG':'en-US';recognition.interimResults=true;recognition.continuous=false;
+      voice.classList.add('is-listening');voice.textContent='⏹️';
+      recognition.onresult=event=>{let transcript='';for(let j=event.resultIndex;j<event.results.length;j++)transcript+=event.results[j][0].transcript;input.value=transcript;};
+      recognition.onerror=()=>{addMessage(messages,'assistant',tr('ماقدرتش أسمع الكلام بوضوح. اتأكد من إذن الميكروفون وحاول تاني.','I could not recognize the speech. Check microphone permission and try again.'));};
+      recognition.onend=()=>{recognition=null;voice.classList.remove('is-listening');voice.textContent='🎙️';input.focus();};
+      try{recognition.start()}catch(_){recognition=null;voice.classList.remove('is-listening');voice.textContent='🎙️';}
+    });
     const footer=make('small','sp-ai-footer',tr('الأوامر المحلية تعمل بدون API؛ الأسئلة العامة قد تحتاج ربط خدمة خارجية اختياريًا.','Local actions work without an API; general questions may optionally use an external service.'));
     panel.append(header,notice,messages,examples,form,footer);document.body.append(launcher,bubble,panel);
     function showNudge(){if(panel.hidden&&!document.hidden){bubble.textContent=nudgeIndex++%2===0?tr('هل تحتاج مساعدة يا '+workerName()+'؟','Need any help, '+workerName()+'?'):tr('نوفا هنا لو احتجت أي حاجة','NOVA is here if you need anything');bubble.hidden=false;bubble.classList.add('is-visible');global.setTimeout(()=>{bubble.classList.remove('is-visible');global.setTimeout(()=>{bubble.hidden=true},350)},7000)}}
