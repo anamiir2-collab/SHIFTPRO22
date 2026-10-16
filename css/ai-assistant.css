@@ -21,3 +21,6 @@
 .sp-ai-footer{padding:0 13px 12px;line-height:1.5}
 @media(max-width:480px){.sp-ai-panel{inset-inline:8px;bottom:calc(var(--tabbar-h,68px) + 76px);width:auto;height:min(70dvh,590px);min-height:320px}.sp-ai-launcher{inset-inline-end:14px;bottom:calc(var(--tabbar-h,68px) + 14px);width:50px;height:50px}}
 @media(prefers-reduced-motion:reduce){.sp-ai-launcher{transition:none}}
+
+.sp-ai-key-btn{margin:8px 12px 0;padding:9px 12px;border:1px solid var(--line,#1b484a);border-radius:11px;background:var(--panel-2,#0f2a2c);color:inherit;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;text-align:center}
+.sp-ai-key-btn:hover{border-color:var(--brand-blue-light,#14b8a6)}
