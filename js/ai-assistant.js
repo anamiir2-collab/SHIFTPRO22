@@ -179,7 +179,9 @@
       event.preventDefault();if(busy)return;const message=input.value.trim();if(!message)return;
       if(message.length>MAX_MESSAGE){addMessage(messages,'assistant',tr('الطلب طويل جدًا. اختصره من فضلك.','That request is too long. Please shorten it.'));return}
       addMessage(messages,'user',message);input.value='';
-      const legalReply=lawAnswer(message);\n      if(legalReply){addMessage(messages,'assistant',legalReply);return}\n      const localReply=localAction(message);
+      const legalReply=lawAnswer(message);
+      if(legalReply){addMessage(messages,'assistant',legalReply);return}
+      const localReply=localAction(message);
       if(localReply){addMessage(messages,'assistant',localReply);return}
       const key=getLocalApiKey(),endpoint=getEndpoint();
       if(!key&&(!endpoint||endpoint.includes('YOUR-WORKER.workers.dev'))){addMessage(messages,'assistant',tr('أنا نوفا يا '+workerName()+' 😊 الأمر ده مش من الأوامر المحلية اللي اتعرفت عليها لسه. جرّب فتح قسم أو طلب ملخص. تقدر تستخدم الوظائف المدعومة بدون API، أما فهم الطلبات العامة فمحتاج ربط اختياري.','I’m NOVA 😊 I don’t recognize that as a local command yet. Try opening a section or asking for a summary. Supported actions work without an API; general language understanding needs an optional connection.'));return}
