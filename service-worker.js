@@ -4,7 +4,7 @@
    - runtime: network-first for navigations, cache-first for static assets
    - cleanup: drop old caches on activate
 */
-const SW_VERSION = 'shifpro-v2.9.1-nova-voice';
+const SW_VERSION = 'shiftpro-law-xref-v2.5.4';
 const APP_SHELL = [
   './',
   './index.html',
