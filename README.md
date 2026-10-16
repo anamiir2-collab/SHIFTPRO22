@@ -289,7 +289,7 @@ After deploying, verify these flows:
 ## 🧭 Recent Tasks & Roadmap
 
 ### Recent work
-- **NOVA (نوفا):** animated robot icon, personal introduction, employee-name greeting, periodic help bubble, Arabic/English UI, suggested prompts, and local-first command handling.
+- **NOVA (نوفا):** animated robot icon, personal introduction, employee-name greeting, periodic help bubble, Arabic/English UI, suggested prompts, browser speech-to-text input where supported, and optional spoken replies using browser speech synthesis.
 - **Egyptian Labor Law integration:** NOVA now searches the law dataset already loaded by ShiftPro (`window.__LAW__`) and returns up to three matching article excerpts with article/book/chapter labels. This lookup works locally without an AI API and warns users to verify the full official text; it is text retrieval, not legal advice.
 - **Local actions without API:** NOVA has starter commands plus local legal-text search. It still does not execute every ShiftPro feature and should not invent a legal answer when no relevant passage is found.
 - **Smart Wallet:** wallets should be user-defined (name, amount, and what each wallet covers), without forced percentage splits or mandatory preset categories. ShiftPro should organize and monitor the user's choices.
@@ -306,7 +306,7 @@ After deploying, verify these flows:
 
 ## 📜 Version History
 
-- **v2.8.0 NOVA + labor law search** — local search across the embedded Egyptian Labor Law dataset, relevant article excerpts, and refreshed service-worker cache.
+- **v2.9.1 NOVA voice support** — microphone speech-to-text where supported by the browser, optional spoken replies, local law search, and refreshed service-worker cache.
 - **v2.7.0 assistant prototype** — NOVA assistant UI, starter local commands, optional CodeCraft/Worker integration scaffold.
 - **v2.5.2** — Premium Navy redesign, Arabic-first default, General Settings fix, welcome card + merged clock, settings section reorganization, dark mode palette, refined animations.
 - **v2.2.0** — iOS-style refresh, hybrid storage migration, official holidays, smart notifications.
