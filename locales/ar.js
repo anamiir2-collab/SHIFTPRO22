@@ -880,6 +880,8 @@
     // ====== المحفظة الذكية (Smart Wallet) ======
     'wallet.tab': 'المحفظة',
     'wallet.title': 'المحفظة الذكية',
+    'wallet.hide_balances': 'إخفاء الأرصدة',
+    'wallet.show_balances': 'إظهار الأرصدة',
     'wallet.subtitle': 'نظّم أموالك بطريقتك',
     'wallet.open': 'فتح المحفظة',
     'wallet.page_dashboard': 'لوحة المحفظة',
