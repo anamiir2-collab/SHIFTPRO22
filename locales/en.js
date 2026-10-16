@@ -878,6 +878,8 @@
     // ====== Smart Wallet ======
     'wallet.tab': 'Wallet',
     'wallet.title': 'Smart Wallet',
+    'wallet.hide_balances': 'Hide balances',
+    'wallet.show_balances': 'Show balances',
     'wallet.subtitle': 'Organize your money your way',
     'wallet.open': 'Open Wallet',
     'wallet.page_dashboard': 'Wallet Dashboard',
