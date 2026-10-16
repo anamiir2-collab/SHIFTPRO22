@@ -203,9 +203,9 @@ You can also just double-click `index.html` to open it via `file://`, but the se
 
 2. **Push the project files to the repository root:**
    ```bash
-   cd SHIFTPRO1
+   cd SHIFTPRO22
    git init
-   git remote add origin https://github.com/<your-username>/SHIFTPRO1.git
+   git remote add origin https://github.com/<your-username>/SHIFTPRO22.git
    git add .
    git commit -m "Initial commit: ShiftPro v2.3.0 Premium Navy Edition"
    git branch -M main
@@ -220,7 +220,7 @@ You can also just double-click `index.html` to open it via `file://`, but the se
 
 4. **Wait ~1 minute** for the build to finish. Your site will be live at:
    ```
-   https://<your-username>.github.io/SHIFTPRO1/
+   https://<your-username>.github.io/SHIFTPRO22/
    ```
 
 5. **For the existing repo** (`anamiir2-collab/SHIFTPRO22`), simply pushing the updated files to `main` will trigger a redeploy. The cache-busting version (the current asset version on all CSS/JS script tags) ensures GitHub Pages serves the latest version, not a stale cached one.
