@@ -193,13 +193,13 @@
     // --- Law (RAG over window.__LAW__) ---
     { intent: 'law_search', words: ['قانون العمل','ماده','مواد القانون','الماده','المادة','فصل تعسفي','عقد العمل','ساعات العمل','فتره الراحه','الراحه الاسبوعيه','الاجر','الاجور','الحد الادني','مكافاه نهايه الخدمه','التامينات','تعويض','تشغيل العمال','اجازه','الاجازه','المرضي','المرضيه','annual leave','labor law','labour law','employment contract','working hours','severance','dismissal','resignation','wages','article'] },
 
-    // --- Explain / simplify (route to API fallback) ---
+    // --- Explain / simplify follow-up (local-only) ---
     { intent: 'explain_more', words: ['اشرح اكتر','بسطها اكتر','بسطها لي','بسيطه اكتر','افهمها اكتر','وضحلي','وضح لي','شرح اكتر','تفاصيل اكتر','explain more','simplify','break it down','explain it','more detail','clarify','what does it mean'] },
   ];
 
   // ---------- Intent detection (PURE) ----------
   // Returns: { kind, intent, raw, params, needsConfirm, missing }
-  //   - kind: 'local' | 'api' | 'unsupported'
+  //   - kind: 'local' | 'law' | 'unsupported'
   //   - intent: string (matches an entry in INTENTS, or 'law_search' fallback, or 'unknown')
   //   - params: extracted parameters (date, time, amount, target, etc.)
   //   - needsConfirm: true for consequential ops (UI must confirm first)
@@ -256,10 +256,10 @@
       };
     }
 
-    // Special handling: "explain more" routes to API.
+    // Explain-more is handled locally without a network request.
     if (matched && matched.intent === 'explain_more') {
       return {
-        kind: 'api',
+        kind: 'local',
         intent: 'explain_more',
         raw: message,
         params: { original: message },
@@ -668,10 +668,9 @@
       return (rec.title || tr(ctx, 'نص قانوني', 'Legal text')) + (meta ? ' (' + meta + ')' : '') + '\n' + snippet;
     });
     return {
-      reply: heading + '\n\n' + results.join('\n\n') + '\n\n' + tr(ctx, 'تنبيه: ده استرجاع من النص المرفق بالتطبيق وليس استشارة قانونية. راجع النص الكامل والسياق والتعديلات الرسمية قبل اتخاذ قرار. اكتب «اشرح اكتر» لو حابب تبسيط أو شرح أعمق لنفس المادة.', 'Note: This is retrieval from the law text bundled with the app, not legal advice. Check the full provision, context, and official amendments before acting. Type "explain more" if you want a deeper or simplified explanation of the same article.'),
+      reply: heading + '\n\n' + results.join('\n\n') + '\n\n' + tr(ctx, 'تنبيه: ده استرجاع من النص المرفق بالتطبيق وليس استشارة قانونية. راجع النص الكامل والسياق والتعديلات الرسمية قبل اتخاذ قرار. اكتب «اشرح اكتر» لو حابب تبسيط أو شرح أعمق لنفس المادة.', 'Note: This is retrieval from the law text bundled with the app, not legal advice. Check the full provision, context, and official amendments before acting. Use the article text shown in the app as the source.'),
       ok: true,
       action: 'law:search',
-      contextForApi: results.join('\n\n') // grounds the API fallback in the same retrieved text
     };
   }
 
@@ -706,7 +705,7 @@
         '• Undo/Redo: "undo", "redo"\n' +
         '• Language & theme: "switch to English", "toggle theme"\n' +
         '• Law: search any article — e.g. "article 41" or "working hours"\n' +
-        '• Type "explain more" after any legal result for a deeper or simplified explanation (uses an optional external API).',
+        '• Type "explain more" after any legal result for a deeper or simplified explanation (is handled locally only).',
       ok: true
     };
   }
@@ -804,8 +803,7 @@
       case 'law_search': return execLawSearch(ctx, params.raw || '');
 
       case 'explain_more':
-        // Handled by the API layer (caller); return neutral marker.
-        return { reply: '', ok: true, action: 'api:explain-more', needsApi: true };
+        return { reply: tr(ctx, 'نوفا تعمل محليًا فقط. راجع النص الأصلي داخل التطبيق؛ لا يوجد شرح خارجي مولّد.', 'NOVA runs locally only. Review the original text in the app; no external generated explanation is available.'), ok: true, action: 'explain-more-local' };
 
       default:
         return { reply: isAr(ctx)
@@ -816,7 +814,7 @@
   }
 
   // ---------- Orchestrator ----------
-  // handle(message, ctx, options) → { reply, ok, action?, contextForApi?, needsApi? }
+  // handle(message, ctx, options) returns a local result.
   function handle(message, ctx, options) {
     ctx = ctx || global; // default to window/global
     options = options || {};
@@ -829,14 +827,10 @@
         ok: false
       };
     }
-    if (intent.kind === 'api') {
-      // Caller (UI) should send to API with this as the user message.
-      return { reply: '', ok: true, needsApi: true, action: 'api:explain-more', original: message };
-    }
-    // Local / law
+        // Local / law
     const res = execute(intent.intent, Object.assign({}, intent.params, { raw: message, missing: intent.missing }), ctx, options.confirmed === true);
-    if (res && res.contextForApi) {
-      res.needsApi = false; // explicit; the UI may choose to follow up with API later
+    if (res && res.) {
+      res. = false; // explicit; the UI may choose to follow up with API later
     }
     return res;
   }
