@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="css/ios-style.css?v=2.5.3">
   <link rel="stylesheet" href="css/law-reader.css?v=2.5.4">
   <link rel="stylesheet" href="css/wallet.css?v=2.5.4">
-  <link rel="stylesheet" href="css/ai-assistant.css?v=2.9.0">
+  <link rel="stylesheet" href="css/ai-assistant.css?v=2.10.0">
   <!-- Arabic-first typography: Cairo (Arabic) + IBM Plex Sans Arabic as fallback.
        We preconnect to Google Fonts only if the network is available; the font
        stack in CSS falls back to system fonts gracefully when offline. -->
@@ -417,7 +417,7 @@
       <button class="item" data-sheet="stats"><span class="ico-box"><img class="menu-icon" src="images/icons/stats.png" alt="" aria-hidden="true"></span><span class="label" data-i18n="more.stats">الإحصائيات المتقدمة</span><span class="chev"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg></span></button>
       <button class="item" data-sheet="control"><span class="ico-box"><img class="menu-icon" src="images/icons/control.png" alt="" aria-hidden="true"></span><span class="label" data-i18n="settings.link_control">اللغة والمظهر</span><span class="chev"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg></span></button>
       <button class="item" data-sheet="backup"><span class="ico-box"><img class="menu-icon" src="images/icons/backup.png" alt="" aria-hidden="true"></span><span class="label" data-i18n="more.backup">النسخ الاحتياطي</span><span class="chev"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg></span></button>
-      <button class="item" data-sheet="aiSetup" type="button"><span class="ico-box"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 2a2 2 0 0 1 2 2v1.5a3 3 0 0 1 1.4 1.7l1.3-.8a2 2 0 0 1 2.7.7l1 1.7a2 2 0 0 1-.7 2.7l-1.3.8a3 3 0 0 1 0 2L19.6 14a2 2 0 0 1 .7 2.7l-1 1.7a2 2 0 0 1-2.7.7l-1.3-.8a3 3 0 0 1-1.4 1.7V21a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-1.5a3 3 0 0 1-1.4-1.7l-1.3.8a2 2 0 0 1-2.7-.7l-1-1.7a2 2 0 0 1 .7-2.7l1.3-.8a3 3 0 0 1 0-2L2.6 10.6a2 2 0 0 1-.7-2.7l1-1.7a2 2 0 0 1 2.7-.7l1.3.8A3 3 0 0 1 9 4.5V3a2 2 0 0 1 2-2h2z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span><span class="label" data-i18n="more.ai_setup">مساعد NOVA الذكي</span><span class="chev"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg></span></button>
+      <button class="item" id="moreNovaHelpBtn" type="button" aria-label="Open NOVA task menu"><span class="ico-box"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="5" y="7" width="14" height="11" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 3v4M8 12h.01M16 12h.01M9 15h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="3" r="1" fill="currentColor"/></svg></span><span class="label" data-i18n="more.nova_help">مساعدة NOVA</span><span class="chev"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg></span></button>
       <button class="item" id="moreLaborLawBtn" type="button"><span class="ico-box labor-law-icon-box"><img class="menu-icon" src="images/icons/labor-law.png" alt="" aria-hidden="true"></span><span class="label" data-i18n="more.labor_law">قانون العمل المصري</span><span class="chev"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg></span></button>
       <button class="item" data-sheet="about"><span class="ico-box"><img class="menu-icon" src="images/icons/about.png" alt="" aria-hidden="true"></span><span class="label" data-i18n="more.about">عن التطبيق</span><span class="chev"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg></span></button>
     </div>
@@ -1087,47 +1087,6 @@
   <button class="btn ghost block sm mt-3" id="closeAboutBtn"><span data-i18n="common.close">إغلاق</span></button>
 </div>
 
-<!-- ============ SHEET: AI ASSISTANT SETUP (NOVA) ============ -->
-<div class="sheet-overlay" id="aiSetupOverlay"></div>
-<div class="sheet ios-sheet" id="aiSetupSheet" role="dialog">
-  <div class="ios-sheet-grabber"></div>
-  <div class="sheet-header-ios">
-    <h3><span data-i18n="ai_setup.title">مساعد NOVA الذكي</span></h3>
-    <p class="sub" data-i18n="ai_setup.sub">تكوين المساعد الذكي والربط الاختياري بـ CodeCraft</p>
-  </div>
-  <div class="ios-settings-list">
-    <div class="ios-setting-row static-row">
-      <span class="ios-row-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 12l3 3 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
-      <span class="ios-row-text">
-        <strong data-i18n="ai_setup.local_mode">الوضع المحلي</strong>
-        <small data-i18n="ai_setup.local_mode_sub">يعمل بدون API للأوامر المدعومة</small>
-      </span>
-      <span class="ios-row-value"><strong class="success">ON</strong></span>
-    </div>
-    <div class="ios-setting-row static-row">
-      <span class="ios-row-icon"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span>
-      <span class="ios-row-text">
-        <strong data-i18n="ai_setup.api_mode">الشرح المعمّق (API)</strong>
-        <small data-i18n="ai_setup.api_mode_sub">يستخدم CodeCraft لتوضيح وبسط النصوص المحلية فقط — لا يجلب من خارج التطبيق</small>
-      </span>
-      <span class="ios-row-value"><strong id="aiSetupApiStatus">—</strong></span>
-    </div>
-  </div>
-  <div class="field ios-field mt-2">
-    <label data-i18n="ai_setup.codecraft_key">مفتاح CodeCraft API</label>
-    <input type="password" id="inpAiKey" placeholder="cc_..." autocomplete="off" spellcheck="false">
-    <small class="muted" data-i18n="ai_setup.codecraft_key_sub">يُخزَّن محليًا على جهازك فقط. اتركه فارغًا للوضع المحلي فقط.</small>
-  </div>
-  <div class="field ios-field mt-2">
-    <label data-i18n="ai_setup.worker_url">رابط الـ Worker (اختياري)</label>
-    <input type="url" id="inpAiWorkerUrl" placeholder="https://your-worker.workers.dev/api/assistant" autocomplete="off" spellcheck="false">
-    <small class="muted" data-i18n="ai_setup.worker_url_sub">بديل عن المفتاح المباشر — يمرر الطلبات عبر Worker خاصتك.</small>
-  </div>
-  <div class="hint" data-i18n="ai_setup.security_note">لا تشارك مفتاحك مع أحد. المفتاح لا يُرسل لأي خادم سوى CodeCraft (أو الـ Worker الخاص بك). الأوامر المحلية تعمل بدون مفتاح على الإطلاق.</div>
-  <button class="btn primary block lg mt-2" id="saveAiSetupBtn" data-i18n="common.save">حفظ</button>
-  <button class="btn ghost block sm mt-2" id="closeAiSetupBtn" data-i18n="common.close">إغلاق</button>
-</div>
-
 <!-- ============ SHEET: DATE & TIME ============ -->
 <div class="sheet-overlay" id="datetimeOverlay"></div>
 <div class="sheet ios-sheet" id="datetimeSheet" role="dialog"><div class="ios-sheet-grabber"></div><div class="sheet-header-ios"><h3><span data-i18n="settings.datetime_title">التاريخ والوقت</span></h3><p class="sub" data-i18n="settings.datetime_sub">الساعة الحية والتقويم الهجري والإجازات الرسمية</p></div>
@@ -1275,12 +1234,9 @@
 <script src="js/wallet-reports.js?v=2.5.3"></script>
 
 <!-- ============ NOVA ASSISTANT ============
-     Order matters: assistant-router.js (pure intent→function router, no DOM)
-     → ai-assistant.js (UI panel + router integration + optional CodeCraft
-     API fallback grounded in app context). The router reads SP* globals and
-     window.__LAW__ only when called; it never touches the DOM directly. -->
-<script src="js/assistant-router.js?v=2.9.1"></script>
-<script src="js/ai-assistant.js?v=2.9.2"></script>
+     Local allowlisted task router + text-only task menu. No external AI API or voice integration. -->
+<script src="js/assistant-router.js?v=2.10.0"></script>
+<script src="js/ai-assistant.js?v=2.10.0"></script>
 <script src="js/app.js?v=2.5.3"></script>
 </body>
 </html>
