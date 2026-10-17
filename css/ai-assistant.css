@@ -27,9 +27,17 @@
 @media(max-width:480px){.sp-ai-panel{inset-inline:8px;bottom:calc(var(--tabbar-h,68px) + 76px);width:auto;height:min(70dvh,590px);min-height:320px}.sp-ai-launcher{inset-inline-end:14px;bottom:calc(var(--tabbar-h,68px) + 14px);width:52px;height:52px}.sp-ai-nudge{inset-inline-end:76px;bottom:calc(var(--tabbar-h,68px) + 22px)}}
 @media(prefers-reduced-motion:reduce){.sp-ai-launcher,.sp-ai-robot{animation:none!important;transition:none!important}}
 
-.sp-ai-voice{min-width:40px;min-height:42px;padding:0 8px;border:1px solid var(--border-color,rgba(120,140,160,.35));border-radius:12px;background:var(--card-bg,#fff);color:var(--text-color,#172033);cursor:pointer;font-size:17px}
-.sp-ai-voice.is-active{border-color:var(--brand-blue-light,#14b8a6);background:rgba(20,184,166,.12)}
-.sp-ai-voice.is-listening{border-color:#dc2626;background:rgba(220,38,38,.12);animation:spVoicePulse 1s ease-in-out infinite}
-.sp-ai-form{grid-template-columns:minmax(0,1fr) auto auto auto}
-@keyframes spVoicePulse{50%{box-shadow:0 0 0 5px rgba(220,38,38,.12)}}
-@media(max-width:380px){.sp-ai-voice{min-width:34px;padding:0 5px}.sp-ai-form{gap:5px}}
+
+/* NOVA task menu — accessible, local actions only */
+.sp-ai-task-menu{max-height:245px;overflow:auto;padding:0 12px 10px;overscroll-behavior:contain}
+.sp-ai-menu-intro{margin:0 0 10px;color:var(--muted,#a8c1c2);font-size:.76rem;line-height:1.5}
+.sp-ai-task-group{margin:0 0 12px}
+.sp-ai-task-heading{margin:0 0 7px;font-size:.8rem;font-weight:800;color:var(--text,#f5fafa)}
+.sp-ai-task-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.sp-ai-task{min-width:0;min-height:38px;padding:8px 10px;border:1px solid var(--line,#1b484a);border-radius:11px;background:var(--panel-2,#0f2a2c);color:inherit;font:inherit;font-size:.75rem;line-height:1.35;text-align:start;overflow-wrap:anywhere;cursor:pointer;transition:border-color .15s ease,background .15s ease}
+.sp-ai-task:hover,.sp-ai-task:focus-visible{border-color:var(--brand-blue-light,#14b8a6);background:rgba(20,184,166,.12);outline:none}
+.sp-ai-task:disabled{opacity:.5;cursor:wait}
+.sp-ai-controls{display:flex;gap:8px;padding:0 12px 8px}
+.sp-ai-control{flex:1;min-height:32px;border:1px solid var(--line,#1b484a);border-radius:10px;background:transparent;color:inherit;font:inherit;font-size:.75rem;cursor:pointer}
+.sp-ai-control:hover,.sp-ai-control:focus-visible{border-color:var(--brand-blue-light,#14b8a6);outline:none}
+@media(max-width:380px){.sp-ai-task-grid{grid-template-columns:1fr}.sp-ai-task-menu{max-height:210px}}
