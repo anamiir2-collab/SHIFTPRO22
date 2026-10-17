@@ -92,7 +92,7 @@
       }
     }
 
-    if (intent.intent === 'explain_more' || intent.kind === 'api' || intent.needsApi) {
+    if (intent.intent === 'explain_more') {
       return tr(
         'نوفا يعمل محليًا من غير خدمة ذكاء اصطناعي خارجية. افتح المادة القانونية المطلوبة من القائمة واقرأ النص المعروض داخل التطبيق؛ لن أرسل بياناتك لخدمة خارجية.',
         'NOVA runs locally without an external AI service. Open the relevant labor-law article from the menu and review the text shown in the app; your data will not be sent to an external service.'
@@ -247,9 +247,10 @@
 
     // Remove only legacy assistant configuration/context keys; leave all app data untouched.
     try {
-      localStorage.removeItem('shiftpro_codecraft_api_key');
-      localStorage.removeItem('shiftpro_ai_endpoint');
-      localStorage.removeItem('shiftpro_ai_last_context');
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i) || '';
+        if (/^shiftpro_.*(?:_api_key|_ai_endpoint|_ai_last_context)$/i.test(key)) localStorage.removeItem(key);
+      }
     } catch (_) {}
 
     const launcher = make('button', 'sp-ai-launcher');
@@ -284,8 +285,8 @@
     header.append(robot, titleWrap, close);
 
     const notice = make('div', 'sp-ai-notice', tr(
-      'نوفا ينفّذ الأوامر المدعومة محليًا من داخل التطبيق. لا توجد خدمة AI خارجية أو تسجيل صوتي في هذه النسخة.',
-      'NOVA runs supported commands locally inside the app. This version has no external AI service or voice recording.'
+      'نوفا ينفّذ الأوامر المدعومة محليًا من داخل التطبيق. لا توجد خدمة ذكاء اصطناعي خارجية في هذه النسخة.',
+      'NOVA runs supported commands locally inside the app. This version has no external AI service.'
     ));
 
     const messages = make('div', 'sp-ai-messages');
