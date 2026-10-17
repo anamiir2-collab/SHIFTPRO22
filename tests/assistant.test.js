@@ -137,10 +137,10 @@ describe('NOVA assistant router — intent detection (Arabic)', () => {
     expect(detect('working hours').intent).toBe('law_search');
   });
 
-  test('explain-more intent routes to API', () => {
+  test('explain-more intent is local-only', () => {
     const e = detect('اشرح اكتر');
     expect(e.intent).toBe('explain_more');
-    expect(e.kind).toBe('api');
+    expect(e.kind).toBe('local');
   });
 
   test('greetings and help', () => {
@@ -181,9 +181,9 @@ describe('NOVA assistant router — intent detection (English)', () => {
     expect(add.params.amount).toBe(50);
   });
 
-  test('explain-more routes to API', () => {
+  test('explain-more remains local-only in English', () => {
     const e = detect('explain more');
-    expect(e.kind).toBe('api');
+    expect(e.kind).toBe('local');
     expect(e.intent).toBe('explain_more');
   });
 });
@@ -379,7 +379,7 @@ describe('NOVA assistant router — execute() with stubs', () => {
     expect(res.reply).toContain('المادة 41');
     expect(res.reply).toContain('نص المادة 41');
     expect(res.reply).toContain('قانون العمل المصري');
-    expect(res.contextForApi).toContain('نص المادة 41');
+    expect(res).not.toHaveProperty('contextForApi');
   });
 
   test('law_search returns graceful message when no match', () => {
@@ -389,11 +389,12 @@ describe('NOVA assistant router — execute() with stubs', () => {
     expect(res.reply).toContain('ملقتش');
   });
 
-  test('explain_more returns the needsApi marker', () => {
+  test('explain_more returns a local-only explanation', () => {
     const ctx = makeCtx();
     const res = R.execute('explain_more', {}, ctx, false);
-    expect(res.needsApi).toBe(true);
-    expect(res.action).toBe('api:explain-more');
+    expect(res.needsApi).toBeUndefined();
+    expect(res.action).toBe('explain-more-local');
+    expect(res.reply).toContain('محليًا');
   });
 
   test('unknown intent returns graceful unsupported reply', () => {
@@ -434,7 +435,7 @@ describe('NOVA assistant router — handle() orchestrator', () => {
     expect(calls).toContain('reports');
   });
 
-  test('routes a law query and grounds the API context', () => {
+  test('routes a law query without external-service context', () => {
     const ctx = {
       SPi18n: { getLocale: () => 'ar' },
       __LAW__: {
@@ -444,12 +445,13 @@ describe('NOVA assistant router — handle() orchestrator', () => {
     };
     const res = R.handle('المادة 41', ctx, {});
     expect(res.ok).toBe(true);
-    expect(res.contextForApi).toContain('نص المادة 41');
+    expect(res).not.toHaveProperty('contextForApi');
   });
 
-  test('routes explain-more to the API path', () => {
+  test('routes explain-more to a local-only response', () => {
     const res = R.handle('اشرح اكتر', { SPi18n: { getLocale: () => 'ar' } }, {});
-    expect(res.needsApi).toBe(true);
+    expect(res.needsApi).toBeUndefined();
+    expect(res.reply).toContain('محليًا');
   });
 
   test('routes an unknown message to a graceful fallback', () => {
