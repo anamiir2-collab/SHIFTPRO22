@@ -712,7 +712,7 @@
   }
 
   // ---------- Executor dispatch table ----------
-  // Returns `{ reply, ok, action?, contextForApi? }`.
+  // Returns `{ reply, ok, action? }`.
   // `confirmed` = true means the UI already obtained user confirmation.
   function execute(intent, params, ctx, confirmed) {
     ctx = ctx || {};
