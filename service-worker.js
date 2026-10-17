@@ -8,6 +8,7 @@ const SW_VERSION = 'shiftpro-shell-v2.10.0';
 const APP_SHELL = [
   './',
   './index.html',
+  './privacy-policy.html',
   './manifest.json',
   './css/style.css',
   './css/animations.css',
