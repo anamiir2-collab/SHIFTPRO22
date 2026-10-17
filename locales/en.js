@@ -498,6 +498,26 @@
     'more.backup': 'Backup',
     'more.labor_law': 'Your Labor Advisor — Egyptian Labor Law',
     'more.about': 'About the app',
+    'more.ai_setup': 'NOVA smart assistant',
+
+    // ====== Sheet: NOVA AI Assistant Setup ======
+    'ai_setup.title': 'NOVA smart assistant',
+    'ai_setup.sub': 'Configure the assistant and optional CodeCraft link',
+    'ai_setup.local_mode': 'Local mode',
+    'ai_setup.local_mode_sub': 'Works without API for supported commands',
+    'ai_setup.api_mode': 'Deeper explanations (API)',
+    'ai_setup.api_mode_sub': 'Uses CodeCraft to clarify and simplify local text only — does not bring in outside information',
+    'ai_setup.codecraft_key': 'CodeCraft API key',
+    'ai_setup.codecraft_key_sub': 'Stored locally on your device only. Leave empty for local-only mode.',
+    'ai_setup.worker_url': 'Worker URL (optional)',
+    'ai_setup.worker_url_sub': 'Alternative to a direct key — routes requests through your own Worker.',
+    'ai_setup.security_note': 'Never share your key. The key is only sent to CodeCraft (or your own Worker). Local commands work without a key.',
+    'ai_setup.invalid_url': 'Invalid URL',
+    'ai_setup.invalid_key': 'Invalid key format',
+    'ai_setup.saved': 'Assistant settings saved',
+    'ai_setup.status_direct': 'Direct',
+    'ai_setup.status_worker': 'Via Worker',
+    'ai_setup.status_local': 'Local only',
 
     // ====== Sheet: App control ======
     'control.title': 'App control',

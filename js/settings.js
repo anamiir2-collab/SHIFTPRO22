@@ -1855,6 +1855,70 @@
   }
 
   // =========================================================
+  // AI Assistant Setup (NOVA + CodeCraft optional)
+  // =========================================================
+
+  function openAiSetupSheet() {
+    const keyInput = $('#inpAiKey');
+    const urlInput = $('#inpAiWorkerUrl');
+    const statusEl = $('#aiSetupApiStatus');
+
+    // Populate from SPAssistant-managed localStorage keys
+    try {
+      if (keyInput) keyInput.value = localStorage.getItem('shiftpro_codecraft_api_key') || '';
+      if (urlInput) urlInput.value = localStorage.getItem('shiftpro_ai_endpoint') || '';
+    } catch (_) {}
+    if (statusEl) {
+      const hasKey = !!(keyInput && keyInput.value && keyInput.value.trim());
+      const hasWorker = !!(urlInput && urlInput.value && urlInput.value.trim() && !/YOUR-WORKER/.test(urlInput.value));
+      if (hasKey) statusEl.textContent = t('ai_setup.status_direct') || 'Direct';
+      else if (hasWorker) statusEl.textContent = t('ai_setup.status_worker') || 'Worker';
+      else statusEl.textContent = t('ai_setup.status_local') || 'Local only';
+      statusEl.className = hasKey || hasWorker ? 'success' : 'muted';
+    }
+
+    const overlay = $('#aiSetupOverlay');
+    const sheet = $('#aiSetupSheet');
+    if (overlay) overlay.classList.add('show');
+    if (sheet) sheet.classList.add('show');
+  }
+
+  function closeAiSetupSheet() {
+    const overlay = $('#aiSetupOverlay');
+    const sheet = $('#aiSetupSheet');
+    if (overlay) overlay.classList.remove('show');
+    if (sheet) sheet.classList.remove('show');
+  }
+
+  function saveAiSetup() {
+    const keyInput = $('#inpAiKey');
+    const urlInput = $('#inpAiWorkerUrl');
+    const key = (keyInput && keyInput.value || '').trim();
+    const url = (urlInput && urlInput.value || '').trim();
+
+    if (url && !/^https?:\/\//i.test(url)) {
+      toast(t('ai_setup.invalid_url') || 'Invalid URL', 'error');
+      return;
+    }
+    if (key && !/^cc_[A-Za-z0-9_\-]+$/.test(key)) {
+      toast(t('ai_setup.invalid_key') || 'Invalid key format', 'error');
+      return;
+    }
+
+    try {
+      localStorage.setItem('shiftpro_codecraft_api_key', key);
+      localStorage.setItem('shiftpro_ai_endpoint', url);
+    } catch (_) {}
+    // Refresh the SPAssistant cache if it exposes setters.
+    if (window.SPAssistant) {
+      if (SPAssistant.setLocalApiKey) SPAssistant.setLocalApiKey(key);
+      if (SPAssistant.setWorkerUrl) SPAssistant.setWorkerUrl(url);
+    }
+    toast(t('ai_setup.saved') || t('settings.saved_toast'), 'success');
+    closeAiSetupSheet();
+  }
+
+  // =========================================================
   // Generic sheet openers
   // =========================================================
 
@@ -1909,6 +1973,11 @@
       case 'about':
         openAboutSheet();
         break;
+
+      case 'aiSetup':
+        openAiSetupSheet();
+        break;
+
       default:
         console.warn('[SPSettings] unknown sheet', name);
     }
@@ -1971,6 +2040,14 @@
     if (datetimeOverlay) datetimeOverlay.addEventListener('click', closeDatetimeSheet);
     const saveDatetimeBtn = $('#saveDatetimeBtn');
     if (saveDatetimeBtn) saveDatetimeBtn.addEventListener('click', onClickOnce(saveDatetimeSettings));
+
+    // AI Assistant Setup
+    const saveAiBtn = $('#saveAiSetupBtn');
+    if (saveAiBtn) saveAiBtn.addEventListener('click', onClickOnce(saveAiSetup));
+    const closeAiBtn = $('#closeAiSetupBtn');
+    if (closeAiBtn) closeAiBtn.addEventListener('click', closeAiSetupSheet);
+    const aiOverlay = $('#aiSetupOverlay');
+    if (aiOverlay) aiOverlay.addEventListener('click', closeAiSetupSheet);
 
     // Settings — every binding null-safe to prevent one missing
     // element from halting the entire init() chain.
@@ -2162,6 +2239,9 @@
     closeDatetimeSheet,
     saveDatetimeSettings,
     openSheetByName,
+    openAiSetupSheet,
+    closeAiSetupSheet,
+    saveAiSetup,
 
     // Expose these for other modules if needed
     calculateUsedLeave,

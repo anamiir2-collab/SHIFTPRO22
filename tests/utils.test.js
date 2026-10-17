@@ -79,10 +79,12 @@ function dayDiff(a, b) {
 // ---------- اختبارات حساب الراتب ----------
 
 // محاكاة لحساب الراتب الأساسي
+// Round to 2 decimals (consistent with SPSalary.computeSalary) so that
+// realistic hourly rates like 6000/208 = 28.846... produce 346.15, not 346.
 function computeSalaryForRange(baseSalary, hours, hourlyRate, overtimeHours, overtimeRate) {
   const basePay = hours * hourlyRate;
   const overtimePay = overtimeHours * hourlyRate * overtimeRate;
-  return Math.round(basePay + overtimePay);
+  return Math.round((basePay + overtimePay) * 100) / 100;
 }
 
 // ---------- Jest tests ----------

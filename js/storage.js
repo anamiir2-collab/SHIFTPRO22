@@ -214,7 +214,7 @@
       schemaVersion: 2,
       installedAt: new Date().toISOString(),
       lastOpenedAt: new Date().toISOString(),
-      appVersion: '2.5.1'
+      appVersion: '2.9.1'
     });
   }
 

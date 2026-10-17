@@ -500,6 +500,26 @@
     'more.backup': 'النسخ الاحتياطي',
     'more.labor_law': 'مستشارك العمالي — قانون العمل المصري',
     'more.about': 'عن التطبيق',
+    'more.ai_setup': 'مساعد NOVA الذكي',
+
+    // ====== ورقة: مساعد NOVA الذكي ======
+    'ai_setup.title': 'مساعد NOVA الذكي',
+    'ai_setup.sub': 'تكوين المساعد الذكي والربط الاختياري بـ CodeCraft',
+    'ai_setup.local_mode': 'الوضع المحلي',
+    'ai_setup.local_mode_sub': 'يعمل بدون API للأوامر المدعومة',
+    'ai_setup.api_mode': 'الشرح المعمّق (API)',
+    'ai_setup.api_mode_sub': 'يستخدم CodeCraft لتوضيح وبسط النصوص المحلية فقط — لا يجلب من خارج التطبيق',
+    'ai_setup.codecraft_key': 'مفتاح CodeCraft API',
+    'ai_setup.codecraft_key_sub': 'يُخزَّن محليًا على جهازك فقط. اتركه فارغًا للوضع المحلي فقط.',
+    'ai_setup.worker_url': 'رابط الـ Worker (اختياري)',
+    'ai_setup.worker_url_sub': 'بديل عن المفتاح المباشر — يمرر الطلبات عبر Worker خاصتك.',
+    'ai_setup.security_note': 'لا تشارك مفتاحك مع أحد. المفتاح لا يُرسل لأي خادم سوى CodeCraft (أو الـ Worker الخاص بك). الأوامر المحلية تعمل بدون مفتاح على الإطلاق.',
+    'ai_setup.invalid_url': 'رابط غير صالح',
+    'ai_setup.invalid_key': 'صيغة المفتاح غير صحيحة',
+    'ai_setup.saved': 'تم حفظ إعدادات المساعد',
+    'ai_setup.status_direct': 'مباشر',
+    'ai_setup.status_worker': 'عبر Worker',
+    'ai_setup.status_local': 'محلي فقط',
 
     // ====== ورقة: التحكم في التطبيق ======
     'control.title': 'التحكم في التطبيق',
