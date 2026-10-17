@@ -4949,3 +4949,18 @@ body[dir="ltr"] .section-list .item .chev,
 .about-accordion-panel.is-open>.about-accordion-content{overflow:visible}
 .about-detail-icon{font-size:.72rem;font-weight:800;letter-spacing:.04em;color:var(--accent);flex:0 0 38px}
 .about-privacy-mark{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;padding:.45rem .6rem;border:1px solid var(--line);border-radius:9px;color:var(--accent);font-size:.68rem;font-weight:800;letter-spacing:.08em}
+
+
+/* Unified icon backgrounds across the More menu, including Smart Wallet and Labor Law. */
+#moreList .item .ico-box,
+#moreList .item .ico-box.labor-law-icon-box {
+  background: var(--panel-3) !important;
+  color: var(--accent);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: none;
+}
+#moreList .item .ico-box img,
+#moreList .item .ico-box .menu-icon {
+  background: transparent;
+}
