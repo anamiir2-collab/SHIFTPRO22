@@ -1,10 +1,10 @@
-/* ShiftPro Service Worker - v2.5.3
+/* ShiftPro Service Worker - v2.9.1
    Strategy:
    - precache: app shell (HTML, CSS, JS, locales, icons, manifest)
    - runtime: network-first for navigations, cache-first for static assets
    - cleanup: drop old caches on activate
 */
-const SW_VERSION = 'shiftpro-law-xref-v2.5.4';
+const SW_VERSION = 'shiftpro-shell-v2.9.1';
 const APP_SHELL = [
   './',
   './index.html',
@@ -45,6 +45,7 @@ const APP_SHELL = [
   './js/wallet.js',
   './js/wallet-forms.js',
   './js/wallet-reports.js',
+  './js/assistant-router.js',
   './js/ai-assistant.js',
   './js/app.js',
   // ====== Egyptian Labor Law dataset + reader ======

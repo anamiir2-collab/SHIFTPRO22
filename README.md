@@ -6,21 +6,78 @@ A complete shift-management, attendance, and salary-tracking PWA. **Arabic-first
 
 ## Current Project Status
 
-The repository has recently been updated with the **NOVA (نوفا) assistant prototype**, its animated floating robot UI, local-first command handling, optional CodeCraft API/Cloudflare Worker integration scaffolding, and a refreshed service-worker cache version.
+The repository has been updated to **v2.9.1+** with a **fully integrated NOVA assistant**. NOVA now routes natural-language requests (Egyptian Arabic, MSA, English) to **real application functions** through a new pure-function command router (`js/assistant-router.js`). Both local and API modes are active simultaneously:
 
-> **Important:** NOVA is still an early implementation. Local commands currently cover only a small set of actions (navigation, visible summary values, and confirmation-gated attendance/check-out buttons when those controls are available). This does **not** mean every app feature can already be controlled by NOVA. Verify each command in the deployed app before relying on it.
+- **Local mode** (zero configuration): handles navigation, attendance check-in/out (with confirmation), salary computation, wallet balances and listing, leaves, calendar day-details, undo/redo, language switching, theme toggling, settings-sheet opening, backup creation, CSV/JSON/PDF/XLSX exports, and **labor-law retrieval over `window.__LAW__`** — all by calling the existing public `SP*` module functions.
+- **API mode** (optional, CodeCraft): when the user asks to *explain more* / *simplify*, NOVA calls CodeCraft (direct key OR via Cloudflare Worker) with a **strict system prompt grounded in the previously retrieved local text** — it never invents external facts, especially for labor-law questions.
 
-### Recent updates
-- Added `js/ai-assistant.js` for NOVA, welcome message, help nudges, bilingual labels, quick prompts, local command routing, and optional external chat requests.
-- Added `css/ai-assistant.css` for the animated robot, chat panel, message bubbles, suggestion chips, responsive layout, and reduced-motion support.
-- Added `worker/src/index.js`, `worker/wrangler.toml`, `worker/package.json`, and `worker/README.md` as the optional Cloudflare Worker backend scaffold.
-- Updated `index.html` to refresh the assistant stylesheet version.
-- Updated `service-worker.js` cache key to `shifpro-v2.7.0-nova-local` so the browser can fetch the latest assistant assets.
-- Assistant UI supports Arabic and English and greets the employee by name when the name is available in the page.
-- Added an optional local browser test-key setting for CodeCraft. A key entered there is stored in that browser's `localStorage`; it is **not committed to the repository**, but it is still accessible to someone who can inspect that browser profile. Prefer a disposable, low-limit test key only.
-- Refreshed the smart-wallet and app documentation so the project structure and current limitations are explicit.
+### Recent updates (v2.9.1+)
+- Added `js/assistant-router.js` — pure-function intent detector + executor with 30+ supported intents, Arabic normalization, date/time/amount extraction, and 22 adapter functions that call real `SP*` module functions safely.
+- Rewrote `js/ai-assistant.js` to consume the router, render bilingual replies, and route "explain more" requests to CodeCraft with a grounding system prompt that uses the last retrieved local context (e.g. matched labor-law article).
+- Added a new **NOVA AI Setup sheet** in `index.html` (Settings → مساعد NOVA الذكي) where the user enters a CodeCraft API key and/or Worker URL. The key is stored in `localStorage` only and is never committed to the repository. Local commands work without any key.
+- Added i18n keys for the new sheet in `locales/ar.js` and `locales/en.js` (17 keys each, parity preserved).
+- Bumped `service-worker.js` cache key to `shiftpro-shell-v2.9.1` and added `js/assistant-router.js` to the precache app shell.
+- Bumped console version stamp in `js/app.js` and the About sheet to `v2.9.1`.
+- Fixed the failing Jest test (`tests/utils.test.js` salary precision — now rounds to 2 decimals to match `SPSalary.computeSalary`).
+- Added `tests/assistant.test.js` with 52 new tests covering intent detection (Arabic/English), execution against stub `SP*` modules, missing-parameter handling, confirmation gating, missing-module graceful failure, and `handle()` orchestrator end-to-end.
 
-**Live API status:** The CodeCraft direct-browser request and Cloudflare Worker route have not been confirmed end-to-end in production. Browser CORS restrictions may block direct requests; the Worker requires deployment and a server-side `CODECRAFT_API_KEY` secret.
+### Architecture
+
+```
+User message
+   ↓
+SPAssistantRouter.detectIntent(message, ctx)  ← PURE, no DOM, Jest-testable
+   ↓
+   ┌─ kind=local ──→ execute(intent, params, ctx, confirmed)
+   │                   ↓ calls real SPStorage / SPAttendance / SPSalary / SPWallet /
+   │                     SPLeaves / SPBackup / SPReports / SPPDF / SPiCal / SPi18n /
+   │                     SPSettings / SPApp / SPUndoRedo / __LAW__
+   │                   ↓ returns {reply, ok, action?}
+   │
+   ├─ kind=law   ──→ execute('law_search')  ← RAG over window.__LAW__
+   │                   ↓ stores contextForApi for next "explain more"
+   │
+   └─ kind=api   ──→ CodeCraft API fallback
+                       ↓ system prompt: "answer ONLY from the provided context;
+                                          never invent external facts"
+                       ↓ body: {message, model='claude-opus-4.8', max_tokens=600}
+```
+
+Key invariants:
+- No `eval`, no dynamic JavaScript, no unsafe DOM manipulation.
+- Every consequential operation (check-in/out, wallet add-tx, backup-overwrite, undo/redo) sets `needsConfirm=true` and the UI shows a confirm dialog first.
+- Missing required parameters (date, amount) are surfaced via `missing: ['date']` so the UI can ask the user to clarify.
+- If a required module is unavailable, `execute()` returns a graceful localized "feature unavailable" reply — never throws.
+- The CodeCraft API key and Worker URL live in `localStorage`; they are never written to source files.
+- All assistant replies and error messages are localized to the current `SPi18n.getLocale()`.
+
+### NOVA setup
+
+1. **Local mode works out of the box.** No API key required. Open the launcher (bottom-right floating robot) and type any command below.
+2. **Optional: enable deeper explanations.** Open the More page → **مساعد NOVA الذكي / NOVA smart assistant**:
+   - Paste your **CodeCraft API key** (starts with `cc_…`). It is stored only in your browser's `localStorage`. Get one at <https://codecraftapi.com/>.
+   - (Optional) Provide a **Worker URL** if you deployed the bundled Cloudflare Worker (`worker/src/index.js`). When a Worker URL is set and no direct key is present, requests route through the Worker, keeping your key server-side.
+   - Save. The status indicator changes to "Direct" or "Via Worker".
+
+### Supported NOVA commands (examples)
+
+| Intent (examples in Arabic) | What happens |
+|---|---|
+| `افتح التقارير` / `افتح المحفظة` / `افتح القانون` | Navigates to the requested tab via `SPApp.goToTab`. |
+| `سجل حضور` / `سجل انصراف` | Asks for confirmation, then triggers `#checkinBtn` / `#checkoutBtn`. |
+| `افتح تفاصيل يوم 12 يناير` | Opens the day sheet via `SPAttendance.openDaySheet`. |
+| `احسب راتبي` / `ساعات الاوف تايم` / `الخصومات` | Computes the current pay period via `SPSalary.computeSalary`. |
+| `رصيد المحفظة` / `اعرض المحافظ` | Reads `SPWallet.getData()` and lists balances. |
+| `ضيف معاملة 50` | Extracts the amount, asks confirmation, opens the wallet add-transaction form. |
+| `رصيد الإجازات` / `طلبات الإجازة` | Reads `SPLeaves.calculateBalances` / `getRequests`. |
+| `اعمل نسخة احتياطية` | Asks confirmation, calls `SPBackup.createManualBackup`. |
+| `تصدير json` / `تصدير csv` / `تقرير pdf` / `تقرير اكسل` | Triggers the appropriate export on `SPBackup` / `SPReports` / `SPPDF`. |
+| `تراجع` / `redo` | Calls `SPUndoRedo.undo` / `redo`. |
+| `غير اللغة للإنجليزي` / `غير الثيم` | Calls `SPi18n.setLocale` / cycles `theme` via `SPStorage.saveSettings`. |
+| `افتح الورديات` / `افتح الإشعارات` | Opens the named settings sheet via `SPSettings.openSheetByName`. |
+| `المادة 41` / `ساعات العمل` / `article 41` | RAG over `window.__LAW__` (Egyptian Labor Law No. 14 of 2025). Returns up to 3 matching article excerpts + book/chapter meta. Stores the result as context for a follow-up "explain more". |
+| `اشرح اكتر` / `simplify` | Routes the previous local context to CodeCraft with a strict system prompt that forbids inventing external facts. The model may only restate or simplify the provided text. |
+| `مساعدة` | Lists everything NOVA can do. |
 
 ---
 
@@ -243,15 +300,25 @@ After deploying, verify these flows:
 5. **Switch theme** — More → App Control → Theme. Light / Dark / Auto should all work; Auto follows OS.
 6. **Salary calculation** — Open the Salary tab. With default settings (6000 EGP / 208 monthly hours), the rate should be `28.85 EGP/hr`.
 7. **No horizontal overflow** — Open Chrome DevTools mobile emulation (iPhone 14, 390px) and verify `scrollWidth === clientWidth`.
+8. **NOVA assistant — local mode (no API key):**
+   - Click the floating robot button (bottom-right).
+   - Try: `افتح التقارير`, `احسب راتبي`, `رصيد المحفظة`, `المادة 41`, `سجل حضور` (cancel the confirm).
+   - Each should reply with a real action or computed data; no "I don't understand" if you used a supported command.
+   - Type `مساعدة` to see the full capabilities list.
+9. **NOVA assistant — API mode (optional, requires CodeCraft key):**
+   - Open More → مساعد NOVA الذكي, paste a `cc_…` key, save.
+   - Ask: `المادة 41`, then `اشرح اكتر` — the API should reply by simplifying the matched article text only, not by inventing external facts.
+10. **Run the test suite:** `npm install && npm test`. Expected: 131 tests passing across `tests/utils.test.js`, `tests/wallet.test.js`, and `tests/assistant.test.js`.
 
 ---
 
 ## 🛡️ Privacy & Security
 
 - **Core app data:** attendance, salary, settings, and leave data are designed to remain on the user's device using browser storage/IndexedDB, unless a feature explicitly exports or shares it.
-- **Optional assistant requests:** if NOVA is configured to use CodeCraft or a deployed Worker, the text sent to the assistant leaves the device and is processed by that service. Do not send sensitive employee or payroll details unless you understand the provider's privacy terms.
-- **Local test key:** the experimental direct-browser mode stores the entered CodeCraft key in this browser's `localStorage`. This keeps the key out of Git commits, but does **not** make it secret from people or extensions able to inspect the browser profile. Use a disposable, low-limit test key and remove it from browser storage when finished.
-- **Production setup:** prefer the Cloudflare Worker approach and store `CODECRAFT_API_KEY` as a Worker secret. Never put a production key in frontend JavaScript, HTML, CSS, or committed files.
+- **Assistant local mode:** all deterministic NOVA commands (navigation, salary computation, wallet balances, leaves, backup, exports, language/theme, law RAG) run **fully on-device**. No network call is made for these. The Egyptian Labor Law text is bundled with the app (`js/data/*.js`) and searched locally.
+- **Assistant API mode (optional):** when the user explicitly types "اشرح اكتر" / "explain more", the previously retrieved local text (e.g. matched labor-law article) and the user's message are sent to CodeCraft. The system prompt forbids inventing external facts. Configure via More → مساعد NOVA الذكي.
+- **API key storage:** the CodeCraft API key is stored in the browser's `localStorage` only. It is never written to source files or committed to Git. Anyone with access to the browser profile can still read it via DevTools — use a disposable, low-limit key for testing, and prefer the Cloudflare Worker approach for production.
+- **Production setup:** deploy the bundled Cloudflare Worker (`worker/src/index.js`) and store `CODECRAFT_API_KEY` as a Worker secret. Set `ALLOWED_ORIGIN` to your exact deployment origin. The Worker proxies requests to CodeCraft server-side, keeping the key out of the browser entirely. Never put a production key in frontend JavaScript, HTML, CSS, or committed files.
 - **No analytics are intentionally added by the assistant changes.** External resources such as Google Fonts and any explicitly configured AI endpoint may make network requests.
 - **Offline support:** the service worker caches the app shell and static assets. External AI chat requires network access; supported local app functions do not require an AI API.
 
@@ -306,7 +373,8 @@ After deploying, verify these flows:
 
 ## 📜 Version History
 
-- **v2.9.1 NOVA voice support** — microphone speech-to-text where supported by the browser, optional spoken replies, local law search, and refreshed service-worker cache.
+- **v2.9.1+ NOVA full integration** — new `js/assistant-router.js` (pure-function intent detector + 22 executors calling real `SP*` module functions); rewrote `js/ai-assistant.js` to consume the router; added NOVA AI Setup sheet for CodeCraft key/Worker URL; strict API system prompt grounded in last retrieved local context; 52 new Jest tests; fixed salary precision test; bumped service-worker cache key.
+- **v2.9.0 NOVA voice support** — microphone speech-to-text where supported by the browser, optional spoken replies, local law search, and refreshed service-worker cache.
 - **v2.7.0 assistant prototype** — NOVA assistant UI, starter local commands, optional CodeCraft/Worker integration scaffold.
 - **v2.5.2** — Premium Navy redesign, Arabic-first default, General Settings fix, welcome card + merged clock, settings section reorganization, dark mode palette, refined animations.
 - **v2.2.0** — iOS-style refresh, hybrid storage migration, official holidays, smart notifications.
