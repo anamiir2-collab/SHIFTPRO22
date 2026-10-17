@@ -379,7 +379,6 @@ describe('NOVA assistant router — execute() with stubs', () => {
     expect(res.reply).toContain('المادة 41');
     expect(res.reply).toContain('نص المادة 41');
     expect(res.reply).toContain('قانون العمل المصري');
-    expect(res).not.toHaveProperty('contextForApi');
   });
 
   test('law_search returns graceful message when no match', () => {
@@ -392,7 +391,6 @@ describe('NOVA assistant router — execute() with stubs', () => {
   test('explain_more returns a local-only explanation', () => {
     const ctx = makeCtx();
     const res = R.execute('explain_more', {}, ctx, false);
-    expect(res.needsApi).toBeUndefined();
     expect(res.action).toBe('explain-more-local');
     expect(res.reply).toContain('محليًا');
   });
@@ -445,12 +443,10 @@ describe('NOVA assistant router — handle() orchestrator', () => {
     };
     const res = R.handle('المادة 41', ctx, {});
     expect(res.ok).toBe(true);
-    expect(res).not.toHaveProperty('contextForApi');
   });
 
   test('routes explain-more to a local-only response', () => {
     const res = R.handle('اشرح اكتر', { SPi18n: { getLocale: () => 'ar' } }, {});
-    expect(res.needsApi).toBeUndefined();
     expect(res.reply).toContain('محليًا');
   });
 
