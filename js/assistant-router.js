@@ -705,7 +705,7 @@
         '• Undo/Redo: "undo", "redo"\n' +
         '• Language & theme: "switch to English", "toggle theme"\n' +
         '• Law: search any article — e.g. "article 41" or "working hours"\n' +
-        '• Type "explain more" after any legal result for a deeper or simplified explanation (is handled locally only).',
+        '• NOVA uses local app functions only; review the original article text for legal details.',
       ok: true
     };
   }
