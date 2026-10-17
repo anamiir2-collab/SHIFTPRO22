@@ -689,7 +689,7 @@
           '• التراجع/الإعادة: «تراجع»، «اعمل redo»\n' +
           '• اللغة والمظهر: «غير اللغة للإنجليزي»، «غير الثيم»\n' +
           '• القانون: دور على أي مادة — مثلاً «المادة 41» أو «ساعات العمل»\n' +
-          '• اكتب «اشرح اكتر» بعد أي نتيجة قانون علشان أبسطها أو أشرحها أعمق (بيستخدم API خارجي اختياري).',
+          '• نوفا تعمل محليًا فقط؛ راجع نص المادة المعروض داخل التطبيق.',
         ok: true
       };
     }
@@ -827,12 +827,8 @@
         ok: false
       };
     }
-        // Local / law
-    const res = execute(intent.intent, Object.assign({}, intent.params, { raw: message, missing: intent.missing }), ctx, options.confirmed === true);
-    if (res && res.) {
-      res. = false; // explicit; the UI may choose to follow up with API later
-    }
-    return res;
+    // Local / law
+    return execute(intent.intent, Object.assign({}, intent.params, { raw: message, missing: intent.missing }), ctx, options.confirmed === true);
   }
 
   // ---------- Public API ----------
