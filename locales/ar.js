@@ -9,8 +9,8 @@
     // ====== عام ======
     'app.name': 'ShiftPro',
     'app.tagline': 'وقتك محسوب.. وشغلك منظم',
-    'app.credit': 'v2.5.2 — تصميم وتطوير أمير أنور',
-    'app.credit_splash': 'v2.5.2 • إدارة الورديات والحضور والرواتب',
+    'app.credit': 'v5.2.1 — تصميم وتطوير أمير أنور',
+    'app.credit_splash': 'v5.2.1 • إدارة الورديات والحضور والرواتب',
     'common.cancel': 'إلغاء',
     'common.save': 'حفظ',
     'common.delete': 'حذف',
