@@ -7,6 +7,7 @@
 
   const MAX_MESSAGE = 2000;
   let busy = false;
+  let pendingFollowUp = null;
   const locale = () => (global.SPi18n && global.SPi18n.getLocale) ? global.SPi18n.getLocale() : 'ar';
   const isAr = () => locale() !== 'en';
   const tr = (ar, en) => isAr() ? ar : en;
@@ -64,8 +65,15 @@
   }
 
   async function processMessage(message) {
-    const text = String(message || '').trim().slice(0, MAX_MESSAGE);
+    let text = String(message || '').trim().slice(0, MAX_MESSAGE);
     if (!text) return tr('اكتب طلبك أو اختار مهمة من القائمة.', 'Type a request or choose a task from the menu.');
+    if (pendingFollowUp) {
+      const follow = text;
+      const isAmount = pendingFollowUp.missing === 'amount' && /^\d+(?:[.,]\d{1,2})?$/.test(follow);
+      const isDate = pendingFollowUp.missing === 'date' && /(\d{4}-\d{1,2}-\d{1,2}|\d{1,2}\s+\S+|today|yesterday|tomorrow|اليوم|النهارده|امبارح|امس|بكره|غدا)/i.test(follow);
+      if (isAmount || isDate) text = pendingFollowUp.command + ' ' + follow;
+      pendingFollowUp = null;
+    }
 
     const router = global.SPAssistantRouter;
     if (!router || typeof router.detectIntent !== 'function' || typeof router.execute !== 'function') {
@@ -102,8 +110,8 @@
     if (intent.kind === 'local') {
       if (intent.missing && intent.missing.length) {
         const missing = intent.missing[0];
-        if (missing === 'date') return tr('حدد التاريخ — مثال: «افتح تفاصيل يوم 12 يناير».', 'Please specify a date — for example, “open day 12 January”.');
-        if (missing === 'amount') return tr('حدد مبلغ المعاملة قبل المتابعة.', 'Enter the transaction amount before continuing.');
+        if (missing === 'date') { pendingFollowUp = { command: text, missing: 'date' }; return tr('حدد التاريخ — مثال: «افتح تفاصيل يوم 12 يناير».', 'Please specify a date — for example, “open day 12 January”.'); }
+        if (missing === 'amount') { pendingFollowUp = { command: text, missing: 'amount' }; return tr('حدد مبلغ المعاملة قبل المتابعة.', 'Enter the transaction amount before continuing.'); }
         return tr('محتاج بيانات إضافية: ' + missing, 'Additional information is required: ' + missing);
       }
 
@@ -141,7 +149,13 @@
         ['افتح التقارير', 'Open reports'],
         ['افتح المحفظة', 'Open wallet'],
         ['افتح قانون العمل', 'Open labor law'],
-        ['افتح الإعدادات', 'Open settings']
+        ['افتح الإعدادات', 'Open settings'],
+        ['افتح عن التطبيق', 'Open about'],
+        ['افتح الإعدادات العامة', 'Open general settings'],
+        ['افتح التحكم في التطبيق', 'Open control panel'],
+        ['افتح إعدادات التاريخ والوقت', 'Open date time settings'],
+        ['افتح إعدادات المظهر', 'Open appearance settings'],
+        ['افتح الإحصائيات', 'Open stats']
       ]
     },
     {
@@ -164,6 +178,7 @@
         ['الخصومات', 'Salary deductions'],
         ['رصيد المحفظة', 'Wallet balance'],
         ['اعرض المحافظ', 'List wallets'],
+        ['افتح تفاصيل المحفظة', 'Open wallet details'],
         ['ضيف معاملة', 'Add transaction'],
         ['حول من محفظة', 'Transfer between wallets']
       ]
