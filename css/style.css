@@ -592,24 +592,23 @@ button { cursor: pointer; color: inherit; }
 .setting-row .meta .t1 { font-size: .95rem; font-weight: 700; color: var(--text); }
 .setting-row .meta .t2 { font-size: .78rem; color: var(--muted); margin-top: 2px; }
 
-/* ---------- 10. Bottom navigation ---------- */
+/* ---------- 10. Bottom navigation: fixed blue, theme-independent ---------- */
 .tabbar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 30;
-  background: var(--panel);
-  border-top: 1px solid var(--line);
+  background: #174ea6;
+  border-top: 1px solid #174ea6;
   display: flex;
   padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
-  backdrop-filter: blur(8px);
 }
 .tabbar .tab-btn {
   flex: 1;
-  background: none;
-  border: none;
-  color: var(--muted);
+  background: transparent;
+  border: 0;
+  color: #eaf2ff;
   font-size: .68rem;
   padding: 6px 2px 4px;
   display: flex;
@@ -618,7 +617,6 @@ button { cursor: pointer; color: inherit; }
   gap: 2px;
   font-family: inherit;
   font-weight: 700;
-  transition: color var(--dur-fast), transform var(--dur-fast);
   position: relative;
 }
 .tabbar .tab-btn .ic {
@@ -636,16 +634,9 @@ button { cursor: pointer; color: inherit; }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.tabbar .tab-btn.active { color: var(--accent); }
-.tabbar .tab-btn.active .ic {
-  filter: drop-shadow(0 0 6px rgba(59,130,246,.5));
-  animation: tabIconFloat 2.4s ease-in-out infinite;
+.tabbar .tab-btn.active {
+  color: #ffffff;
 }
-@keyframes tabIconFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
-}
-.tabbar .tab-btn:active { transform: scale(.92); }
 .tabbar .tab-btn.active::before {
   content: '';
   position: absolute;
@@ -655,8 +646,7 @@ button { cursor: pointer; color: inherit; }
   width: 28px;
   height: 3px;
   border-radius: 999px;
-  background: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
+  background: #ffffff;
 }
 
 /* ---------- 11. Calendar ---------- */
