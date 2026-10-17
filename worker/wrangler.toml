@@ -1,9 +1,0 @@
-name = "shiftpro-smart-assistant"
-main = "src/index.js"
-compatibility_date = "2026-10-01"
-
-[vars]
-# Set this to the exact app origin that serves ShiftPro.
-# GitHub Pages project sites normally use https://OWNER.github.io as the origin.
-ALLOWED_ORIGIN = "https://anamiir2-collab.github.io"
-CODECRAFT_MODEL = "claude-opus-4.8"
