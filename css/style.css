@@ -1,5 +1,5 @@
 /* ============================================================
-   ShiftPro v2.5.1 — Professional Shift & Attendance Manager
+   ShiftPro v5.2.1 — Professional Shift & Attendance Manager
    Mobile-First, RTL Arabic, Dark + Light themes, PWA-ready
    ============================================================ */
 
@@ -4905,7 +4905,7 @@ body[dir="ltr"] .section-list .item .chev,
 }
 
 
-/* ShiftPro v2.5.3 — polished About, app guide and privacy panels */
+/* ShiftPro v5.2.1 — polished About, app guide and privacy panels */
 .about-premium-card{position:relative;overflow:hidden;padding:.35rem .85rem;border:1px solid color-mix(in srgb,var(--accent) 22%,var(--line));border-radius:20px;background:linear-gradient(145deg,var(--panel,var(--card)) 0%,color-mix(in srgb,var(--accent) 5%,var(--panel,var(--card))) 100%);box-shadow:0 8px 24px rgba(15,30,55,.07)}
 .about-premium-card:before{content:"";position:absolute;inset-block:14px;inset-inline-start:0;width:3px;border-radius:8px;background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 15%,transparent))}
 .about-premium-card .about-accordion-trigger{padding:1rem .45rem;border:0;background:transparent}
