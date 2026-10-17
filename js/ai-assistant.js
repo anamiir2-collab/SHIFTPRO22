@@ -34,10 +34,12 @@
 
   function setBusy(value, send, input, taskButtons) {
     busy = value;
-    send.disabled = value;
-    input.disabled = value;
-    send.textContent = value ? '…' : tr('إرسال', 'Send');
-    taskButtons.forEach(button => { button.disabled = value; });
+    if (send) {
+      send.disabled = value;
+      send.textContent = value ? '…' : tr('إرسال', 'Send');
+    }
+    if (input) input.disabled = value;
+    (taskButtons || []).forEach(button => { button.disabled = value; });
   }
 
   function openPanel(panel, input) {
@@ -147,8 +149,8 @@
       tasks: [
         ['سجل حضور', 'Check in'],
         ['سجل انصراف', 'Check out'],
-        ['افتح تفاصيل يوم اليوم', 'Open today details'],
-        ['افتح إدارة الورديات', 'Open shift manager'],
+        ['افتح تفاصيل يوم اليوم', 'Open day today'],
+        ['افتح إدارة الورديات', 'Open shifts manager'],
         ['رصيد الإجازات', 'Leave balance'],
         ['طلبات الإجازة', 'Leave requests']
       ]
@@ -162,7 +164,7 @@
         ['الخصومات', 'Salary deductions'],
         ['رصيد المحفظة', 'Wallet balance'],
         ['اعرض المحافظ', 'List wallets'],
-        ['ضيف معاملة', 'Add wallet transaction'],
+        ['ضيف معاملة', 'Add transaction'],
         ['حول من محفظة', 'Transfer between wallets']
       ]
     },
@@ -171,7 +173,7 @@
       tasks: [
         ['تقرير pdf', 'Export PDF report'],
         ['تقرير اكسل', 'Export Excel report'],
-        ['تقرير csv', 'Export CSV report'],
+        ['تقرير csv', 'Report CSV'],
         ['تصدير json', 'Export JSON backup'],
         ['اعمل نسخة احتياطية', 'Create backup']
       ]
@@ -231,12 +233,12 @@
 
   async function runCommand(command, messages, input, send, taskButtons) {
     if (busy) return;
+    setBusy(true, send, input, taskButtons || []);
     addMessage(messages, 'user', command);
     if (input) input.value = '';
-    if (send && input) setBusy(true, send, input, taskButtons || []);
     const reply = await processMessage(command);
     addMessage(messages, 'assistant', reply);
-    if (send && input) setBusy(false, send, input, taskButtons || []);
+    setBusy(false, send, input, taskButtons || []);
     if (input) input.focus();
   }
 
