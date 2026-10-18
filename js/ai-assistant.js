@@ -1,4 +1,4 @@
-/* ShiftPro NOVA assistant — local-only, allowlisted task assistant.
+/* ShiftPro Mero assistant — local-only, allowlisted task assistant.
  * No external AI/API integration, no microphone, and no speech playback.
  * Task buttons dispatch only to the existing SPAssistantRouter functions.
  */
@@ -57,8 +57,8 @@
 
   function confirmAction(intent) {
     const message = tr(
-      'نوفا هتنفذ الإجراء "' + intent + '". هل تؤكد التنفيذ؟',
-      'NOVA is about to run "' + intent + '". Do you want to continue?'
+      'ميرو هتنفذ الإجراء "' + intent + '". هل تؤكد التنفيذ؟',
+      'Mero is about to run "' + intent + '". Do you want to continue?'
     );
     try { return typeof global.confirm === 'function' && global.confirm(message); }
     catch (_) { return false; }
@@ -77,7 +77,7 @@
 
     const router = global.SPAssistantRouter;
     if (!router || typeof router.detectIntent !== 'function' || typeof router.execute !== 'function') {
-      return tr('مساعد نوفا غير متاح حاليًا لأن وحدة الأوامر لم تُحمّل. حدّث التطبيق وحاول مرة أخرى.', 'NOVA is unavailable because its command module did not load. Refresh the app and try again.');
+      return tr('مساعد ميرو غير متاح حاليًا لأن وحدة الأوامر لم تُحمّل. حدّث التطبيق وحاول مرة أخرى.', 'Mero is unavailable because its command module did not load. Refresh the app and try again.');
     }
 
     let intent;
@@ -102,8 +102,8 @@
 
     if (intent.intent === 'explain_more') {
       return tr(
-        'نوفا يعمل محليًا من غير خدمة ذكاء اصطناعي خارجية. افتح المادة القانونية المطلوبة من القائمة واقرأ النص المعروض داخل التطبيق؛ لن أرسل بياناتك لخدمة خارجية.',
-        'NOVA runs locally without an external AI service. Open the relevant labor-law article from the menu and review the text shown in the app; your data will not be sent to an external service.'
+        'ميرو يعمل محليًا من غير خدمة ذكاء اصطناعي خارجية. افتح المادة القانونية المطلوبة من القائمة واقرأ النص المعروض داخل التطبيق؛ لن أرسل بياناتك لخدمة خارجية.',
+        'Mero runs locally without an external AI service. Open the relevant labor-law article from the menu and review the text shown in the app; your data will not be sent to an external service.'
       );
     }
 
@@ -219,7 +219,7 @@
 
   function buildTaskMenu(input, messages, taskButtonsRef) {
     const menu = make('div', 'sp-ai-task-menu');
-    menu.setAttribute('aria-label', tr('قائمة مهام نوفا', 'NOVA task menu'));
+    menu.setAttribute('aria-label', tr('قائمة مهام ميرو', 'Mero task menu'));
     menu.appendChild(make('p', 'sp-ai-menu-intro', tr(
       'اختار المهمة المطلوبة. الأزرار بتشغّل وظائف ShiftPro الموجودة فقط.',
       'Choose a task. Buttons run only existing ShiftPro functions.'
@@ -271,14 +271,14 @@
     const launcher = make('button', 'sp-ai-launcher');
     launcher.id = 'spAiLauncher';
     launcher.type = 'button';
-    launcher.setAttribute('aria-label', tr('افتح نوفا مساعد ShiftPro', 'Open NOVA, the ShiftPro assistant'));
-    launcher.title = tr('نوفا — مساعد ShiftPro', 'NOVA — ShiftPro assistant');
+    launcher.setAttribute('aria-label', tr('افتح ميرو مساعد ShiftPro', 'Open Mero, the ShiftPro assistant'));
+    launcher.title = tr('ميرو — مساعد ShiftPro', 'Mero — ShiftPro assistant');
     launcher.innerHTML = '<svg class="sp-ai-robot" viewBox="0 0 64 64" aria-hidden="true"><path class="robot-antenna" d="M32 8v7"/><circle cx="32" cy="6" r="3"/><rect x="11" y="17" width="42" height="34" rx="12"/><path class="robot-ear" d="M7 29v10m50-10v10"/><rect class="robot-face" x="17" y="23" width="30" height="20" rx="7"/><circle class="robot-eye" cx="25" cy="32" r="3"/><circle class="robot-eye" cx="39" cy="32" r="3"/><path class="robot-mouth" d="M25 38q7 5 14 0"/><path class="robot-body" d="M21 52v5m22-5v5"/></svg><span class="sp-ai-online"></span>';
 
     const bubble = make('button', 'sp-ai-nudge', tr('هل تحتاج مساعدة يا ' + workerName() + '؟', 'Need any help, ' + workerName() + '?'));
     bubble.type = 'button';
     bubble.hidden = true;
-    bubble.setAttribute('aria-label', tr('افتح نوفا للمساعدة', 'Open NOVA for help'));
+    bubble.setAttribute('aria-label', tr('افتح ميرو للمساعدة', 'Open Mero for help'));
 
     const panel = make('section', 'sp-ai-panel');
     panel.id = 'spAiPanel';
@@ -289,7 +289,7 @@
 
     const header = make('div', 'sp-ai-header');
     const titleWrap = make('div', 'sp-ai-title-wrap');
-    const title = make('strong', '', 'NOVA · نوفا');
+    const title = make('strong', '', 'Mero · ميرو');
     title.id = 'spAiTitle';
     titleWrap.append(title, make('small', '', tr('مساعد ShiftPro للمهام اليومية', 'ShiftPro task assistant')));
     const close = make('button', 'sp-ai-close', '×');
@@ -300,16 +300,16 @@
     header.append(robot, titleWrap, close);
 
     const notice = make('div', 'sp-ai-notice', tr(
-      'نوفا ينفّذ الأوامر المدعومة محليًا من داخل التطبيق. لا توجد خدمة ذكاء اصطناعي خارجية في هذه النسخة.',
-      'NOVA runs supported commands locally inside the app. This version has no external AI service.'
+      'ميرو ينفّذ الأوامر المدعومة محليًا من داخل التطبيق. لا توجد خدمة ذكاء اصطناعي خارجية في هذه النسخة.',
+      'Mero runs supported commands locally inside the app. This version has no external AI service.'
     ));
 
     const messages = make('div', 'sp-ai-messages');
     messages.id = 'spAiMessages';
     messages.setAttribute('role', 'list');
     addMessage(messages, 'assistant', tr(
-      'أهلًا يا ' + workerName() + '! أنا نوفا. اختار مهمة من القائمة أو اكتب طلبك. قبل الإجراءات الحساسة هطلب منك التأكيد، ولو وظيفة مش موجودة هقولك بوضوح.',
-      'Hi ' + workerName() + '! I’m NOVA. Choose a task from the menu or type a request. I’ll ask before sensitive actions and clearly tell you when a feature is unavailable.'
+      'أهلًا يا ' + workerName() + '! أنا ميرو. اختار مهمة من القائمة أو اكتب طلبك. قبل الإجراءات الحساسة هطلب منك التأكيد، ولو وظيفة مش موجودة هقولك بوضوح.',
+      'Hi ' + workerName() + '! I’m Mero. Choose a task from the menu or type a request. I’ll ask before sensitive actions and clearly tell you when a feature is unavailable.'
     ));
 
     const taskButtons = [];
@@ -375,7 +375,7 @@
     });
 
     // Keep the More-page assistant entry as a shortcut to the real task menu.
-    const moreHelp = document.getElementById('moreNovaHelpBtn');
+    const moreHelp = document.getElementById('moreMeroHelpBtn');
     if (moreHelp) moreHelp.addEventListener('click', () => openPanel(panel, input));
 
     let nudgeIndex = 0;
@@ -383,7 +383,7 @@
       if (panel.hidden && !document.hidden) {
         bubble.textContent = nudgeIndex++ % 2 === 0
           ? tr('هل تحتاج مساعدة يا ' + workerName() + '؟', 'Need any help, ' + workerName() + '?')
-          : tr('نوفا هنا لو احتجت أي حاجة', 'NOVA is here if you need anything');
+          : tr('ميرو هنا لو احتجت أي حاجة', 'Mero is here if you need anything');
         bubble.hidden = false;
         bubble.classList.add('is-visible');
         global.setTimeout(() => {
