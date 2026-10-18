@@ -580,16 +580,18 @@ function setupInstallPrompt() {
   // ---------- Service worker ----------
   function registerSW() {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js').catch((err) => {
+      // Skip the browser HTTP cache when checking the worker script so published
+      // updates are detected promptly, including on installed PWAs.
+      navigator.serviceWorker.register('service-worker.js?v=6.1.0-mero3', {
+        updateViaCache: 'none'
+      }).then((registration) => {
+        registration.update().catch(() => {});
+      }).catch((err) => {
         console.warn('[SW] registration failed', err);
       });
-      // Listen for updates
       navigator.serviceWorker.addEventListener('controllerchange', () => {
-        // Refresh to apply update
-        if (navigator.serviceWorker.controller) {
-          // Don't auto-reload; just notify
-          // User can refresh manually
-        }
+        // Keep the current screen stable; the new worker takes control and the
+        // next navigation loads the refreshed app shell.
       });
     }
   }
