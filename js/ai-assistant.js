@@ -326,30 +326,52 @@
     const form = make('form', 'sp-ai-form');
     form.append(input, send);
 
+    // Four everyday shortcuts keep the assistant simple; the full task catalogue stays optional.
+    const shortcuts = make('div', 'sp-ai-shortcuts');
+    const quickTasks = [
+      ['سجل حضور', 'Check in'],
+      ['افتح إدارة الورديات', 'Open shifts'],
+      ['ملخص الراتب', 'Salary summary'],
+      ['افتح التقارير', 'Open reports']
+    ];
+    quickTasks.forEach(task => {
+      const command = isAr() ? task[0] : task[1];
+      const button = make('button', 'sp-ai-shortcut', command);
+      button.type = 'button';
+      button.addEventListener('click', () => runCommand(command, messages, input, send, taskButtons));
+      shortcuts.appendChild(button);
+    });
+
     const taskMenu = buildTaskMenu(input, messages, taskButtons);
+    taskMenu.hidden = true;
     const controls = make('div', 'sp-ai-controls');
-    const menuButton = make('button', 'sp-ai-control', tr('القائمة الرئيسية', 'Main menu'));
+    const menuButton = make('button', 'sp-ai-control', tr('كل المهام', 'All tasks'));
     menuButton.type = 'button';
-    const cancelButton = make('button', 'sp-ai-control', tr('إلغاء', 'Cancel'));
+    menuButton.setAttribute('aria-expanded', 'false');
+    const cancelButton = make('button', 'sp-ai-control', tr('مسح الكتابة', 'Clear input'));
     cancelButton.type = 'button';
     controls.append(menuButton, cancelButton);
 
     const footer = make('small', 'sp-ai-footer', tr(
-      'تعتمد النتائج على بيانات ووظائف التطبيق الموجودة على جهازك. راجع النتيجة داخل القسم المرتبط عند الحاجة.',
-      'Results use the app’s existing local data and functions. Check the related app section when needed.'
+      'ميرو يستخدم وظائف ShiftPro الموجودة فقط، ويطلب التأكيد قبل الإجراءات المهمة.',
+      'Mero uses existing ShiftPro functions only and asks before important actions.'
     ));
 
-    panel.append(header, notice, messages, taskMenu, controls, form, footer);
+    panel.append(header, notice, messages, shortcuts, taskMenu, controls, form, footer);
     document.body.append(launcher, bubble, panel);
 
     menuButton.addEventListener('click', () => {
-      taskMenu.hidden = false;
-      addMessage(messages, 'assistant', tr('القائمة الرئيسية جاهزة — اختار المهمة المناسبة.', 'Main menu is ready — choose the task you need.'));
+      taskMenu.hidden = !taskMenu.hidden;
+      menuButton.setAttribute('aria-expanded', String(!taskMenu.hidden));
+      menuButton.textContent = taskMenu.hidden ? tr('كل المهام', 'All tasks') : tr('إخفاء المهام', 'Hide tasks');
     });
     cancelButton.addEventListener('click', () => {
       input.value = '';
-      addMessage(messages, 'assistant', tr('تم إلغاء الطلب الحالي. لم يتم تنفيذ إجراء جديد.', 'The current request was cancelled. No new action was run.'));
       input.focus();
+    });
+
+    panel.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !panel.hidden) closePanel(panel, launcher);
     });
 
     launcher.addEventListener('click', () => {
