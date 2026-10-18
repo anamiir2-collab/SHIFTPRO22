@@ -1,5 +1,5 @@
 /**
- * ShiftPro NOVA Assistant — Router tests.
+ * ShiftPro Mero Assistant — Router tests.
  *
  * The router's `detectIntent` is a PURE function (no DOM, no SP* globals
  * required), so we can unit-test it end-to-end in Jest with zero mocking.
@@ -32,7 +32,7 @@ function detect(msg) {
 }
 
 // ---------- Tests ----------
-describe('NOVA assistant router — module surface', () => {
+describe('Mero assistant router — module surface', () => {
   test('exposes detectIntent, execute, handle, and adapters', () => {
     expect(typeof R.detectIntent).toBe('function');
     expect(typeof R.execute).toBe('function');
@@ -41,7 +41,7 @@ describe('NOVA assistant router — module surface', () => {
   });
 });
 
-describe('NOVA assistant router — intent detection (Arabic)', () => {
+describe('Mero assistant router — intent detection (Arabic)', () => {
   test('navigation intents', () => {
     expect(detect('افتح التقارير').intent).toBe('nav_reports');
     expect(detect('روح على الرئيسيه').intent).toBe('nav_dashboard');
@@ -155,7 +155,7 @@ describe('NOVA assistant router — intent detection (Arabic)', () => {
   });
 });
 
-describe('NOVA assistant router — intent detection (English)', () => {
+describe('Mero assistant router — intent detection (English)', () => {
   test('navigation intents', () => {
     expect(detect('open reports').intent).toBe('nav_reports');
     expect(detect('go to dashboard').intent).toBe('nav_dashboard');
@@ -188,7 +188,7 @@ describe('NOVA assistant router — intent detection (English)', () => {
   });
 });
 
-describe('NOVA assistant router — unsupported & edge cases', () => {
+describe('Mero assistant router — unsupported & edge cases', () => {
   test('empty message is unsupported', () => {
     expect(detect('').kind).toBe('unsupported');
     expect(detect('   ').kind).toBe('unsupported');
@@ -209,7 +209,7 @@ describe('NOVA assistant router — unsupported & edge cases', () => {
 });
 
 // ---------- execute() tests with stub SP* modules ----------
-describe('NOVA assistant router — execute() with stubs', () => {
+describe('Mero assistant router — execute() with stubs', () => {
   function makeCtx(overrides) {
     const calls = [];
     const ctx = Object.assign({
@@ -420,7 +420,7 @@ describe('NOVA assistant router — execute() with stubs', () => {
 });
 
 // ---------- handle() orchestrator ----------
-describe('NOVA assistant router — handle() orchestrator', () => {
+describe('Mero assistant router — handle() orchestrator', () => {
   test('routes a navigation request end-to-end', () => {
     const calls = [];
     const ctx = {
@@ -458,7 +458,7 @@ describe('NOVA assistant router — handle() orchestrator', () => {
 });
 
 // ---------- Pure helpers ----------
-describe('NOVA assistant router — pure helpers', () => {
+describe('Mero assistant router — pure helpers', () => {
   test('normalize() handles Arabic diacritics and alef variants', () => {
     expect(R.normalize('الإعدادات')).toBe(R.normalize('الاعدادات'));
     expect(R.normalize('المحفظة')).toBe(R.normalize('المحفظه'));
