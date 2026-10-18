@@ -1,4 +1,4 @@
-/* ShiftPro NOVA assistant — local-first helper */
+/* ShiftPro Mero assistant — local-first helper */
 .sp-ai-launcher{position:fixed;z-index:1200;inset-inline-end:18px;bottom:calc(var(--tabbar-h,68px) + 18px);width:58px;height:58px;border:1px solid rgba(255,255,255,.24);border-radius:20px;background:linear-gradient(145deg,#22c7b5,#087f8c 70%,#164e63);color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.28);cursor:pointer;display:grid;place-items:center;transition:transform .25s ease,box-shadow .25s ease;animation:spRobotFloat 3.4s ease-in-out infinite}
 .sp-ai-launcher:hover{transform:translateY(-3px) rotate(-3deg);box-shadow:0 14px 34px rgba(0,0,0,.32)}
 .sp-ai-robot{width:43px;height:43px;overflow:visible;animation:spRobotLook 5s ease-in-out infinite}
@@ -28,7 +28,7 @@
 @media(prefers-reduced-motion:reduce){.sp-ai-launcher,.sp-ai-robot{animation:none!important;transition:none!important}}
 
 
-/* NOVA task menu — accessible, local actions only */
+/* Mero task menu — accessible, local actions only */
 .sp-ai-task-menu{max-height:245px;overflow:auto;padding:0 12px 10px;overscroll-behavior:contain}
 .sp-ai-menu-intro{margin:0 0 10px;color:var(--muted,#a8c1c2);font-size:.76rem;line-height:1.5}
 .sp-ai-task-group{margin:0 0 12px}
