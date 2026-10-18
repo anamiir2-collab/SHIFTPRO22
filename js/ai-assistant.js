@@ -330,7 +330,7 @@
     const shortcuts = make('div', 'sp-ai-shortcuts');
     const quickTasks = [
       ['سجل حضور', 'Check in'],
-      ['افتح إدارة الورديات', 'Open shifts'],
+      ['افتح إدارة الورديات', 'Open shifts manager'],
       ['ملخص الراتب', 'Salary summary'],
       ['افتح التقارير', 'Open reports']
     ];
