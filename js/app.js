@@ -887,7 +887,7 @@ function setupInstallPrompt() {
     });
 
     // Console signature
-    console.log('%cShiftPro v5.2.1', 'color:#3b82f6;font-size:18px;font-weight:bold;');
+    console.log('%cShiftPro v6.1.0', 'color:#3b82f6;font-size:18px;font-weight:bold;');
   }
 
   // Boot
