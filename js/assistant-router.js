@@ -1,5 +1,5 @@
 /* ============================================================
-   ShiftPro — NOVA Assistant Command Router
+   ShiftPro — Mero Assistant Command Router
    ----------------------------------------------------------------
    Purpose:
      Maps natural-language requests (Egyptian Arabic, MSA, English)
@@ -678,7 +678,7 @@
   function execHelp(ctx) {
     if (isAr(ctx)) {
       return {
-        reply: 'أنا نوفا — مساعدك في ShiftPro. اقدر أعمل كتير، منها:\n' +
+        reply: 'أنا ميرو — مساعدك في ShiftPro. اقدر أعمل كتير، منها:\n' +
           '• التنقل: «افتح التقارير»، «افتح الراتب»، «افتح المحفظة»، «افتح القانون»\n' +
           '• الحضور: «سجل حضور»، «سجل انصراف»، «افتح تفاصيل يوم 12 يناير»\n' +
           '• الراتب: «احسب راتبي»، «ساعات الأوفرتايم»، «الخصومات»\n' +
@@ -689,12 +689,12 @@
           '• التراجع/الإعادة: «تراجع»، «اعمل redo»\n' +
           '• اللغة والمظهر: «غير اللغة للإنجليزي»، «غير الثيم»\n' +
           '• القانون: دور على أي مادة — مثلاً «المادة 41» أو «ساعات العمل»\n' +
-          '• نوفا تعمل محليًا فقط؛ راجع نص المادة المعروض داخل التطبيق.',
+          '• ميرو تعمل محليًا فقط؛ راجع نص المادة المعروض داخل التطبيق.',
         ok: true
       };
     }
     return {
-      reply: 'I\'m NOVA — your ShiftPro assistant. I can do a lot, including:\n' +
+      reply: 'I\'m Mero — your ShiftPro assistant. I can do a lot, including:\n' +
         '• Navigation: "open reports", "open salary", "open wallet", "open law"\n' +
         '• Attendance: "check in", "check out", "open day 12 January"\n' +
         '• Salary: "compute my salary", "overtime hours", "deductions"\n' +
@@ -705,7 +705,7 @@
         '• Undo/Redo: "undo", "redo"\n' +
         '• Language & theme: "switch to English", "toggle theme"\n' +
         '• Law: search any article — e.g. "article 41" or "working hours"\n' +
-        '• NOVA uses local app functions only; review the original article text for legal details.',
+        '• Mero uses local app functions only; review the original article text for legal details.',
       ok: true
     };
   }
@@ -803,7 +803,7 @@
       case 'law_search': return execLawSearch(ctx, params.raw || '');
 
       case 'explain_more':
-        return { reply: tr(ctx, 'نوفا تعمل محليًا فقط. راجع النص الأصلي داخل التطبيق؛ لا يوجد شرح خارجي مولّد.', 'NOVA runs locally only. Review the original text in the app; no external generated explanation is available.'), ok: true, action: 'explain-more-local' };
+        return { reply: tr(ctx, 'ميرو تعمل محليًا فقط. راجع النص الأصلي داخل التطبيق؛ لا يوجد شرح خارجي مولّد.', 'Mero runs locally only. Review the original text in the app; no external generated explanation is available.'), ok: true, action: 'explain-more-local' };
 
       default:
         return { reply: isAr(ctx)
