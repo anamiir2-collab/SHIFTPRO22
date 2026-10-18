@@ -53,3 +53,14 @@
   bottom:calc(var(--tabbar-h,68px) + 16px + env(safe-area-inset-bottom,0px))!important;
 }
 .sp-ai-panel[hidden],.sp-ai-nudge[hidden]{display:none!important}
+/* Mero simplified home: four direct actions, with the full catalogue collapsed by default. */
+.sp-ai-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 12px 10px}
+.sp-ai-shortcut{min-width:0;min-height:42px;padding:9px 11px;border:1px solid var(--line,#1b484a);border-radius:12px;background:var(--panel-2,#0f2a2c);color:var(--text,#f5fafa);font:inherit;font-size:.8rem;font-weight:650;text-align:start;overflow-wrap:anywhere;cursor:pointer;transition:background .15s ease,border-color .15s ease}
+.sp-ai-shortcut:hover,.sp-ai-shortcut:focus-visible{background:rgba(20,184,166,.12);border-color:var(--brand-blue-light,#14b8a6);outline:none}
+.sp-ai-shortcut:disabled{opacity:.5;cursor:wait}
+.sp-ai-task-menu[hidden]{display:none!important}
+.sp-ai-notice{flex:0 0 auto}
+.sp-ai-messages{min-height:72px}
+.sp-ai-form{flex:0 0 auto}
+.sp-ai-footer{flex:0 0 auto}
+@media(max-width:360px){.sp-ai-shortcuts{grid-template-columns:1fr}.sp-ai-shortcut{min-height:38px}}
