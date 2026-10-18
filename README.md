@@ -4,23 +4,23 @@
 
 A shift-management, attendance, payroll, leave, reports, and personal-wallet PWA with Arabic-first RTL support and English LTR support. The app can work offline after its application files are cached.
 
-## Current NOVA assistant
+## Current Mero assistant
 
-NOVA is a **local, text-only task assistant**. It provides tappable task options and routes supported requests to existing ShiftPro functions through `js/assistant-router.js`.
+Mero is a **local, text-only task assistant**. It provides tappable task options and routes supported requests to existing ShiftPro functions through `js/assistant-router.js`.
 
 - Task groups cover navigation, attendance and shifts, salary, wallet, leaves, reports, backup, settings, labor-law search, and help.
 - Task buttons invoke existing application actions rather than simulating results.
 - Check-in, check-out, financial changes, backup, and other consequential actions use confirmation where required by the router.
 - Requests with missing required details ask the user to clarify.
 - Unsupported or unavailable functions are identified clearly.
-- NOVA does not call an external AI service, send chat messages to an AI provider, request microphone access, record audio, recognize speech, or read replies aloud.
+- Mero does not call an external AI service, send chat messages to an AI provider, request microphone access, record audio, recognize speech, or read replies aloud.
 - The assistant uses a strict allowlist of known intents. It does not execute generated JavaScript or arbitrary commands.
 
 ## Privacy and data handling
 
 - ShiftPro's operational records are handled by the app's existing local storage and modules.
-- NOVA invokes supported local application functions and does not send chat content or work records to an external AI service.
-- NOVA has no voice input or spoken-response functionality.
+- Mero invokes supported local application functions and does not send chat content or work records to an external AI service.
+- Mero has no voice input or spoken-response functionality.
 - Backup files can contain personal, attendance, salary, and wallet data. Store exported backups securely.
 - The privacy policy is available at [privacy-policy.html](./privacy-policy.html). Review it whenever app storage or integrations change.
 
@@ -100,7 +100,7 @@ Push changes to the configured publishing branch to trigger the GitHub Pages dep
 
 ## Safety and maintenance notes
 
-- Preserve the existing ShiftPro modules and local data formats when changing NOVA.
+- Preserve the existing ShiftPro modules and local data formats when changing Mero.
 - Keep Arabic right-to-left and English left-to-right behavior consistent.
 - Do not add API keys, tokens, passwords, or sensitive user data to frontend files.
 - Do not claim a task succeeded unless the underlying function reports a result that supports that claim.
