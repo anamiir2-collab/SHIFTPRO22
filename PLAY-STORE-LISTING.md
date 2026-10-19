@@ -1,4 +1,4 @@
-# ShiftPro — Google Play Store Listing Checklist
+# SHIFTPRO — Google Play Store Listing Checklist
 
 Last verified against official Google Play documentation on **15 October 2026**.
 URLs cited at the end of this document.
@@ -10,7 +10,7 @@ URLs cited at the end of this document.
 | Field | Value |
 |---|---|
 | Application ID | `com.anamiir2.shiftpro` |
-| App name (Play Console) | ShiftPro |
+| App name (Play Console) | SHIFTPRO |
 | Default language | Arabic (ar) — RTL primary |
 | Category | Productivity |
 | Content rating | Everyone (submit the IARC questionnaire — see §7) |
@@ -25,14 +25,14 @@ URLs cited at the end of this document.
 
 ## 2. Store listing — English (en)
 
-**App title (max 30 chars):** ShiftPro
+**App title (max 30 chars):** SHIFTPRO
 
 **Short description (max 80 chars):**
 Offline shifts, attendance, working hours and salary manager.
 
 **Full description (max 4000 chars):**
 ```
-ShiftPro is a complete, offline-first companion for managing your work shifts,
+SHIFTPRO is a complete, offline-first companion for managing your work shifts,
 attendance, working hours and salary. Designed for individual employees and
 small teams, it puts every record you need on a single device — no account, no
 server, no cloud sync.
@@ -82,7 +82,7 @@ KEY FEATURES
 PRIVACY
 
 All attendance, salary and working-hours data is stored locally on your
-device. ShiftPro does not transmit your records to any server. The optional
+device. SHIFTPRO does not transmit your records to any server. The optional
 Google Fonts link (for typography) degrades gracefully to system fonts when
 offline. Review the full policy at:
 https://anamiir2-collab.github.io/SHIFTPROO/privacy-policy.html
@@ -92,14 +92,14 @@ https://anamiir2-collab.github.io/SHIFTPROO/privacy-policy.html
 
 ## 3. Store listing — Arabic (ar)
 
-**App title (max 30 chars):** ShiftPro
+**App title (max 30 chars):** SHIFTPRO
 
 **Short description (max 80 chars):**
 إدارة الورديات والحضور وساعات العمل والرواتب بدون إنترنت.
 
 **Full description (max 4000 chars):**
 ```
-ShiftPro تطبيق متكامل لإدارة الورديات والحضور وساعات العمل والرواتب، يعمل
+SHIFTPRO تطبيق متكامل لإدارة الورديات والحضور وساعات العمل والرواتب، يعمل
 بالكامل بدون إنترنت وعلى جهازك فقط — بدون حساب وبدون خادم وبدمج مزامنة سحابية.
 
 أبرز الميزات
@@ -144,7 +144,7 @@ ShiftPro تطبيق متكامل لإدارة الورديات والحضور و
 الخصوصية
 
 كل بيانات الحضور والرواتب وساعات العمل تُحفظ محليًا على جهازك. لا يرسل
-ShiftPro سجلاتك إلى أي خادم. رابط خطوط Google الاختياري (لتحسين الخطوط)
+SHIFTPRO سجلاتك إلى أي خادم. رابط خطوط Google الاختياري (لتحسين الخطوط)
 يتحول تلقائيًا لخطوط النظام عند انقطاع الإنترنت. اطّلع على السياسة كاملة:
 https://anamiir2-collab.github.io/SHIFTPROO/privacy-policy.html
 ```
@@ -184,7 +184,7 @@ https://anamiir2-collab.github.io/SHIFTPROO/privacy-policy.html
 Based on the actual implementation review (15 October 2026):
 
 ### Does your app collect or share any of the required user data types?
-**No.** ShiftPro does not collect any user data. There is no analytics SDK, no
+**No.** SHIFTPRO does not collect any user data. There is no analytics SDK, no
 crash reporting SDK, no login, no server-side storage, and no network calls
 that transmit user-entered data.
 
@@ -281,7 +281,7 @@ Expected rating: **Everyone**.
 No other permissions are requested. The app does NOT request:
 - Camera, microphone, contacts, location, storage, photos, notifications
 (WebView local notifications via `Notification` API inside the WebView are
-not exposed to Android system notifications without a plugin, and ShiftPro
+not exposed to Android system notifications without a plugin, and SHIFTPRO
 has not registered one).
 
 ---
