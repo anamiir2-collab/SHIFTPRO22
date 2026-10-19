@@ -1,4 +1,4 @@
-/* ShiftPro - Main App Entry
+/* SHIFTPRO - Main App Entry
    Coordinates navigation, dashboard rendering, splash, PWA install,
    notifications, search, and global event wiring.
    Exposes: window.SPApp
@@ -582,7 +582,7 @@ function setupInstallPrompt() {
     if ('serviceWorker' in navigator) {
       // Skip the browser HTTP cache when checking the worker script so published
       // updates are detected promptly, including on installed PWAs.
-      navigator.serviceWorker.register('service-worker.js?v=6.1.0-mero3', {
+      navigator.serviceWorker.register('service-worker.js?v=6.5.0-mero3', {
         updateViaCache: 'none'
       }).then((registration) => {
         registration.update().catch(() => {});
@@ -889,7 +889,7 @@ function setupInstallPrompt() {
     });
 
     // Console signature
-    console.log('%cShiftPro v6.1.0', 'color:#3b82f6;font-size:18px;font-weight:bold;');
+    console.log('%cSHIFTPRO v6.5.0', 'color:#3b82f6;font-size:18px;font-weight:bold;');
   }
 
   // Boot
