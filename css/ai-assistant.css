@@ -102,3 +102,41 @@
   .sp-ai-tts-settings{grid-template-columns:1fr}
   .sp-ai-tts-button{min-height:40px}
 }
+
+
+/* Mero compact chat refresh: smaller footprint, clear close control, real chat scrolling. */
+.sp-ai-panel{
+  width:min(360px,calc(100vw - 20px));
+  height:min(500px,calc(100dvh - 115px));
+  min-height:280px;
+  border-radius:18px;
+}
+.sp-ai-header{padding:9px 11px;gap:8px}
+.sp-ai-header-robot{width:34px;height:34px;flex-basis:34px;border-radius:11px}
+.sp-ai-header-robot .sp-ai-robot{width:30px;height:30px}
+.sp-ai-title-wrap strong{font-size:.92rem}
+.sp-ai-title-wrap small{font-size:.68rem}
+.sp-ai-close{width:36px;height:36px;flex:0 0 36px;font-size:26px;line-height:1}
+.sp-ai-notice{display:none!important}
+.sp-ai-footer{display:none!important}
+.sp-ai-messages{
+  min-height:0;
+  flex:1 1 auto;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  scroll-behavior:smooth;
+  padding:10px;
+}
+.sp-ai-message{font-size:.83rem;padding:9px 11px;max-width:94%}
+.sp-ai-shortcuts{gap:6px;padding:0 10px 8px}
+.sp-ai-shortcut{min-height:36px;padding:7px 9px;font-size:.75rem}
+.sp-ai-controls{padding:0 10px 7px}
+.sp-ai-form{padding:9px;gap:6px}
+.sp-ai-input{font-size:.84rem;padding:9px 10px;max-height:88px;resize:none}
+.sp-ai-send{min-height:38px;padding:0 12px}
+.sp-ai-tts-settings{display:none}
+.sp-ai-panel.is-voice-settings-open .sp-ai-tts-settings{display:grid}
+@media(max-width:480px){
+ .sp-ai-panel{inset-inline:10px;bottom:calc(var(--tabbar-h,68px) + 72px);width:auto;height:min(62dvh,500px);min-height:280px}
+}
