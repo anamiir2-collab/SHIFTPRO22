@@ -4954,3 +4954,8 @@ body[dir="ltr"] .section-list .item .chev,
 #moreList .item .ico-box .menu-icon {
   background: transparent;
 }
+
+
+/* PWA install prompt intentionally removed from the interface. */
+.install-banner,
+#installBanner { display: none !important; }
