@@ -9,6 +9,8 @@
   let objectUrl = null;
   let speaking = false;
   let fallbackWarned = false;
+  let generation = 0;
+  let requestController = null;
   let messagesNode = null;
 
   const tr = (ar, en) => {
@@ -26,6 +28,8 @@
     return el;
   };
   function stop() {
+    generation++;
+    if (requestController) { requestController.abort(); requestController = null; }
     if (currentAudio) { currentAudio.pause(); currentAudio.src = ''; currentAudio = null; }
     if (objectUrl) { URL.revokeObjectURL(objectUrl); objectUrl = null; }
     if ('speechSynthesis' in global) global.speechSynthesis.cancel();
@@ -63,23 +67,28 @@
     global.speechSynthesis.speak(utterance);
   }
   function showStatus(text) {
-    const status = document.getElementById('meroTtsStatus');
-    if (status && text) status.textContent = text;
+    const notice = document.getElementById('meroTtsNotice');
+    if (notice && text) notice.textContent = text;
   }
   async function speak(text) {
     if (!prefs.enabled || !String(text || '').trim()) return;
     stop();
+    const token = generation;
     speaking = true;
     updateStatus();
     const payload = { text: String(text).slice(0, 2000), voice: prefs.voice, speed: Number(prefs.speed) || 1 };
     if (prefs.engine !== 'browser') {
       try {
+        requestController = new AbortController();
         const response = await fetch(ENDPOINT + '/tts', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload), cache: 'no-store', mode: 'cors'
+          body: JSON.stringify(payload), cache: 'no-store', mode: 'cors', signal: requestController.signal
         });
+        if (token !== generation) return;
         if (!response.ok) throw new Error((await response.text()).slice(0, 300));
         const blob = await response.blob();
+        if (token !== generation) return;
+        requestController = null;
         if (blob.type && !blob.type.includes('audio')) throw new Error('Invalid audio response');
         objectUrl = URL.createObjectURL(blob);
         currentAudio = new Audio(objectUrl);
@@ -89,6 +98,8 @@
         updateStatus();
         return;
       } catch (_) {
+        if (token !== generation) return;
+        requestController = null;
         if (prefs.engine === 'local') {
           speaking = false; updateStatus();
           showStatus(tr('خدمة Piper المحلية غير متاحة. شغّل الخدمة وثبّت نموذجًا صوتيًا.', 'Local Piper is unavailable. Start the service and install a voice model.'));
@@ -146,6 +157,8 @@
     const stopBtn = make('button', 'sp-ai-tts-button secondary', tr('إيقاف فوري', 'Stop now'));
     stopBtn.type = 'button'; stopBtn.id = 'meroTtsStop'; stopBtn.disabled = true;
     top.append(toggle, status, stopBtn);
+    const notice = make('p', 'sp-ai-tts-notice', tr('الصوت المحلي غير مفعل. فعّل الصوت لاختيار المحرك.', 'Local voice is off. Enable voice to choose an engine.'));
+    notice.id = 'meroTtsNotice';
     const settings = make('div', 'sp-ai-tts-settings');
     const voiceLabel = make('label', '', tr('الصوت', 'Voice'));
     const voice = make('select', 'sp-ai-tts-select'); voice.id = 'meroTtsVoice'; voiceLabel.appendChild(voice);
@@ -158,7 +171,7 @@
     const pitchLabel = make('label', '', tr('درجة النبرة (البديل فقط)', 'Pitch (fallback only)'));
     const pitch = make('input', 'sp-ai-tts-range'); pitch.type='range'; pitch.min='0.5'; pitch.max='1.5'; pitch.step='0.1'; pitch.value=String(prefs.pitch); pitchLabel.append(pitch, make('small','',String(prefs.pitch)));
     settings.append(voiceLabel, engineLabel, speedLabel, pitchLabel);
-    controls.append(top, settings);
+    controls.append(top, notice, settings);
     const header = panel.querySelector('.sp-ai-header');
     if (header) header.insertAdjacentElement('afterend', controls); else panel.prepend(controls);
     toggle.addEventListener('click', () => {
