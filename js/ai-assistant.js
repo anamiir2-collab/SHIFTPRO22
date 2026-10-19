@@ -306,12 +306,16 @@
     const title = make('strong', '', 'Mero · ميرو');
     title.id = 'spAiTitle';
     titleWrap.append(title, make('small', '', tr('مساعد ShiftPro للمهام اليومية', 'ShiftPro task assistant')));
+    const voiceSettings = make('button', 'sp-ai-close sp-ai-voice-settings-toggle', '⚙');
+    voiceSettings.type = 'button';
+    voiceSettings.setAttribute('aria-label', tr('إعدادات صوت ميرو', 'Mero voice settings'));
+    voiceSettings.title = tr('إعدادات الصوت', 'Voice settings');
     const close = make('button', 'sp-ai-close', '×');
     close.type = 'button';
     close.setAttribute('aria-label', tr('إغلاق', 'Close'));
     const robot = make('div', 'sp-ai-header-robot');
     robot.innerHTML = launcher.innerHTML;
-    header.append(robot, titleWrap, close);
+    header.append(robot, titleWrap, voiceSettings, close);
 
     const notice = make('div', 'sp-ai-notice', tr(
       'ميرو ينفّذ الأوامر المدعومة محليًا من داخل التطبيق. لا توجد خدمة ذكاء اصطناعي خارجية في هذه النسخة.',
@@ -397,6 +401,12 @@
       openPanel(panel, input);
     });
     close.addEventListener('click', () => closePanel(panel, launcher));
+    voiceSettings.addEventListener('click', () => {
+      const opened = panel.classList.toggle('is-voice-settings-open');
+      voiceSettings.setAttribute('aria-pressed', String(opened));
+      const settings = panel.querySelector('.sp-ai-tts-settings');
+      if (settings) settings.style.display = opened ? 'grid' : 'none';
+    });
 
     form.addEventListener('submit', async event => {
       event.preventDefault();
