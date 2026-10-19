@@ -1,0 +1,6 @@
+# Node test tooling (npm install for the Jest suite in tests/)
+node_modules/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
