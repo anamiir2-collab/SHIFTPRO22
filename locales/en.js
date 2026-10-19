@@ -1,4 +1,4 @@
-/* ShiftPro - English translations (en-US)
+/* SHIFTPRO - English translations (en-US)
    All UI strings keyed for i18n. Variable substitution via {name}.
    NOTE: keys must stay 1:1 with locales/ar.js (parity checked by scripts/check-i18n.js)
 */
@@ -7,10 +7,10 @@
 
   const en = {
     // ====== General ======
-    'app.name': 'ShiftPro',
+    'app.name': 'SHIFTPRO',
     'app.tagline': 'Your time, calculated. Your work, organized.',
-    'app.credit': 'v6.1.0 — Designed & Developed by Amir Anwar',
-    'app.credit_splash': 'v6.1.0 • Shifts, attendance & payroll',
+    'app.credit': 'v6.5.0 — Designed & Developed by Amir Anwar',
+    'app.credit_splash': 'v6.5.0 • Shifts, attendance & payroll',
     'common.cancel': 'Cancel',
     'common.save': 'Save',
     'common.delete': 'Delete',
@@ -60,8 +60,8 @@
     'clock.aria': 'Live clock — Cairo time',
 
     // ====== Dashboard ======
-    'dashboard.welcome_ar': 'أهلًا بك في ShiftPro',
-    'dashboard.welcome_en': 'Welcome to ShiftPro',
+    'dashboard.welcome_ar': 'أهلًا بك في SHIFTPRO',
+    'dashboard.welcome_en': 'Welcome to SHIFTPRO',
     'dashboard.greeting_morning': 'Good morning',
     'dashboard.greeting_noon': 'Good day',
     'dashboard.greeting_evening': 'Good evening',
@@ -544,7 +544,7 @@
     'notifsheet.h_16': '16 hours',
     'notifsheet.save': 'Save reminders',
     'notifsheet.saved_toast': 'Reminders & notifications saved',
-    'notifsheet.granted_toast': 'ShiftPro notifications enabled',
+    'notifsheet.granted_toast': 'SHIFTPRO notifications enabled',
     'notifsheet.denied_toast': 'Notification permission not granted',
     'notifsheet.module_missing': 'Notifications module unavailable',
 
@@ -651,7 +651,7 @@
     'backup.deleted_all': 'All data deleted',
 
     // ====== Sheet: About ======
-    'about.title': 'About ShiftPro',
+    'about.title': 'About SHIFTPRO',
     'about.sub': 'Manage shifts, attendance and pay in one place',
     'about.version': 'Version',
     'about.offline': 'Works offline',
@@ -684,10 +684,10 @@
     'about.guide_disclaimer': 'Important: results depend on the accuracy of your entries and settings. Review records before using them for official decisions.',
     'about.security_hint': 'How your information is stored and protected',
     'about.privacy_intro_title': 'Privacy starts on your device',
-    'about.privacy_intro': 'The current version is designed to keep work records locally on your device rather than automatically sending attendance and salary data to a ShiftPro cloud server.',
+    'about.privacy_intro': 'The current version is designed to keep work records locally on your device rather than automatically sending attendance and salary data to a SHIFTPRO cloud server.',
     'about.privacy_storage': 'Information you enter—such as profile details, shifts, attendance, leave and salary settings—is stored in the app or browser’s local storage on your device.',
-    'about.privacy_no_account_title': 'No ShiftPro cloud account in this version',
-    'about.privacy_no_account': 'Current features do not require an account on a ShiftPro server, and records are not automatically uploaded to sync between devices.',
+    'about.privacy_no_account_title': 'No SHIFTPRO cloud account in this version',
+    'about.privacy_no_account': 'Current features do not require an account on a SHIFTPRO server, and records are not automatically uploaded to sync between devices.',
     'about.privacy_backup': 'Backups may contain personal information, attendance and salary records. Keep files somewhere trusted and do not share them with unauthorized people. Clearing app or browser data may cause local records to be lost.',
     'about.privacy_device_title': 'Protect your device',
     'about.privacy_device': 'Use a strong screen lock, keep your operating system updated and avoid leaving your device unlocked. The app does not independently lock your device or guarantee encryption of backup files.',
@@ -798,16 +798,16 @@
     'notif.daily_body': 'Worked {hours}, overtime {overtime}, expected {value}',
 
     // ====== PWA / Install ======
-    'pwa.install_title': 'Install ShiftPro',
+    'pwa.install_title': 'Install SHIFTPRO',
     'pwa.install_body': 'Add the app to your home screen',
     'pwa.install_btn': 'Install',
     'pwa.installed': 'App installed',
-    'pwa.installed_toast': 'ShiftPro installed!',
+    'pwa.installed_toast': 'SHIFTPRO installed!',
     'pwa.installing': 'Installing...',
     'pwa.manual_hint': 'Open the browser menu and choose "Add to Home Screen"',
 
     // ====== Onboarding ======
-    'onboard.welcome_title': 'Welcome to ShiftPro',
+    'onboard.welcome_title': 'Welcome to SHIFTPRO',
     'onboard.welcome_body': 'A complete shift, attendance, and salary manager — fully local on your device, no server.',
     'onboard.start': 'Get started',
     'onboard.skip': 'Skip',
