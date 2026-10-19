@@ -79,6 +79,20 @@
     const payload = { text: String(text).slice(0, 2000), voice: prefs.voice, speed: Number(prefs.speed) || 1 };
     if (prefs.engine !== 'browser') {
       try {
+        // Refresh the local voice list so starting Piper after the app opened works without a reload.
+        const voiceResponse = await fetch(ENDPOINT + '/voices', { cache: 'no-store' });
+        if (token !== generation) return;
+        if (voiceResponse.ok) {
+          const voiceData = await voiceResponse.json();
+          const localVoices = voiceData.voices || [];
+          if (localVoices.length && !localVoices.some(v => v.id === payload.voice)) {
+            payload.voice = localVoices[0].id;
+            prefs.voice = payload.voice;
+            savePrefs();
+            const voiceSelect = document.getElementById('meroTtsVoice');
+            if (voiceSelect) populateVoices(voiceSelect, localVoices);
+          }
+        }
         requestController = new AbortController();
         const response = await fetch(ENDPOINT + '/tts', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
