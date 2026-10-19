@@ -1,7 +1,7 @@
 {
   "name": "shiftpro",
-  "version": "6.1.0",
-  "description": "ShiftPro - إدارة الورديات والحضور والرواتب (PWA)",
+  "version": "6.5.0",
+  "description": "SHIFTPRO - إدارة الورديات والحضور والرواتب (PWA)",
   "private": true,
   "scripts": {
     "test": "jest tests/",
