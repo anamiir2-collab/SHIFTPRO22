@@ -147,7 +147,11 @@
     const lang = messages[locale] ? locale : 'ar';
     const safeName = (name || '').trim() || (lang === 'en' ? 'there' : 'صديقي');
     const template = choose(lang);
-    text.textContent = template.replace(/\{name\}/g, safeName);
+    // Personalize every message, including templates that do not contain {name}.
+    const personalized = template.includes('{name}')
+      ? template.replace(/\{name\}/g, safeName)
+      : (lang === 'en' ? safeName + ', ' + template : 'يا ' + safeName + '، ' + template);
+    text.textContent = personalized;
     card.hidden = false;
     card.setAttribute('aria-live', 'polite');
     card.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
