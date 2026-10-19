@@ -76,3 +76,5 @@
 .sp-ai-tts-settings label{display:grid;gap:4px;min-width:0;font-size:.7rem;color:var(--muted,#a8c1c2)}
 .sp-ai-tts-select{width:100%;min-width:0;padding:6px;border:1px solid var(--line,#1b484a);border-radius:8px;background:var(--panel-2,#0f2a2c);color:var(--text,#f5fafa);font:inherit;font-size:.72rem}
 .sp-ai-tts-range{width:100%;accent-color:var(--brand-blue,#0d9488)}.sp-ai-tts-settings small{font-size:.68rem;color:var(--text,#f5fafa)}
+
+.sp-ai-tts-notice{margin:7px 0 0;font-size:.69rem;line-height:1.5;color:var(--muted,#a8c1c2)}
