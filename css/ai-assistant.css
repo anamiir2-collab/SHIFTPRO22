@@ -64,3 +64,15 @@
 .sp-ai-form{flex:0 0 auto}
 .sp-ai-footer{flex:0 0 auto}
 @media(max-width:360px){.sp-ai-shortcuts{grid-template-columns:1fr}.sp-ai-shortcut{min-height:38px}}
+
+/* Local neural TTS controls, release 6.1.1 */
+.sp-ai-tts{padding:9px 12px;border-bottom:1px solid var(--line,#1b484a);background:var(--panel,#0b1f21)}
+.sp-ai-tts-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.sp-ai-tts-button{min-height:32px;padding:6px 10px;border:1px solid var(--line,#1b484a);border-radius:10px;background:var(--brand-blue,#0d9488);color:#fff;font:inherit;font-size:.75rem;font-weight:700;cursor:pointer}
+.sp-ai-tts-button.secondary{background:transparent;color:inherit}.sp-ai-tts-button:disabled{opacity:.45;cursor:not-allowed}
+.sp-ai-tts-status{flex:1;min-width:100px;font-size:.72rem;color:var(--muted,#a8c1c2)}
+.sp-ai-tts-status[data-speaking="true"]{color:var(--brand-blue-light,#14b8a6);font-weight:800}
+.sp-ai-tts-settings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:9px}
+.sp-ai-tts-settings label{display:grid;gap:4px;min-width:0;font-size:.7rem;color:var(--muted,#a8c1c2)}
+.sp-ai-tts-select{width:100%;min-width:0;padding:6px;border:1px solid var(--line,#1b484a);border-radius:8px;background:var(--panel-2,#0f2a2c);color:var(--text,#f5fafa);font:inherit;font-size:.72rem}
+.sp-ai-tts-range{width:100%;accent-color:var(--brand-blue,#0d9488)}.sp-ai-tts-settings small{font-size:.68rem;color:var(--text,#f5fafa)}
