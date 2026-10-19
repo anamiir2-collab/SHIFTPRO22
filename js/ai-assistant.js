@@ -1,5 +1,8 @@
 /* ShiftPro Mero assistant — local-only, allowlisted task assistant.
- * No external AI/API integration, no microphone, and no speech playback.
+ * No external AI/API integration and no microphone. Assistant replies may be
+ * read aloud ONLY by the optional, loopback-only local voice module
+ * (js/mero-tts.js), which receives them through the 'mero:assistant-message'
+ * event dispatched below when a reply is rendered.
  * Task buttons dispatch only to the existing SPAssistantRouter functions.
  */
 (function (global) {
@@ -7,6 +10,7 @@
 
   const MAX_MESSAGE = 2000;
   let busy = false;
+  let messageSeq = 0;
   let pendingFollowUp = null;
   const locale = () => (global.SPi18n && global.SPi18n.getLocale) ? global.SPi18n.getLocale() : 'ar';
   const isAr = () => locale() !== 'en';
@@ -30,6 +34,16 @@
     row.setAttribute('role', 'listitem');
     list.appendChild(row);
     list.scrollTop = list.scrollHeight;
+    if (role === 'assistant') {
+      // Hand the finished reply to the optional voice module (if loaded).
+      // Fired once per rendered reply; user/system text is never dispatched.
+      try {
+        messageSeq += 1;
+        document.dispatchEvent(new CustomEvent('mero:assistant-message', {
+          detail: { role: 'assistant', text: String(text || ''), id: 'mero-msg-' + messageSeq }
+        }));
+      } catch (_) { /* voice playback must never break the assistant */ }
+    }
     return row;
   }
 
