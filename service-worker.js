@@ -4,7 +4,7 @@
    - runtime: network-first for navigations, cache-first for static assets
    - cleanup: drop old caches on activate
 */
-const SW_VERSION = 'shiftpro-shell-v6.1.0-mero3';
+const SW_VERSION = 'shiftpro-shell-v6.1.1-mero-tts1';
 const APP_SHELL = [
   './',
   './index.html',
@@ -48,6 +48,7 @@ const APP_SHELL = [
   './js/wallet-reports.js',
   './js/assistant-router.js',
   './js/ai-assistant.js',
+  './js/mero-tts.js',
   './js/app.js',
   // ====== Egyptian Labor Law dataset + reader ======
   // Dataset: order matters only at runtime (script tags in index.html);
