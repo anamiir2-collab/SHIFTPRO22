@@ -1,4 +1,4 @@
-/* ShiftPro - الترجمات العربية (ar-EG)
+/* SHIFTPRO - الترجمات العربية (ar-EG)
    كل النصوص الظاهرة في الواجهة بتعتمد على المفاتيح دي.
    المتغيرات داخل النصوص بالصيغة {name} - بتتبدّل عبر t(key, vars)
 */
@@ -7,10 +7,10 @@
 
   const ar = {
     // ====== عام ======
-    'app.name': 'ShiftPro',
+    'app.name': 'SHIFTPRO',
     'app.tagline': 'وقتك محسوب.. وشغلك منظم',
-    'app.credit': 'v6.1.0 — تصميم وتطوير أمير أنور',
-    'app.credit_splash': 'v6.1.0 • إدارة الورديات والحضور والرواتب',
+    'app.credit': 'v6.5.0 — تصميم وتطوير أمير أنور',
+    'app.credit_splash': 'v6.5.0 • إدارة الورديات والحضور والرواتب',
     'common.cancel': 'إلغاء',
     'common.save': 'حفظ',
     'common.delete': 'حذف',
@@ -60,8 +60,8 @@
     'clock.aria': 'الساعة الحية — توقيت القاهرة',
 
     // ====== لوحة التحكم ======
-    'dashboard.welcome_ar': 'أهلًا بك في ShiftPro',
-    'dashboard.welcome_en': 'Welcome to ShiftPro',
+    'dashboard.welcome_ar': 'أهلًا بك في SHIFTPRO',
+    'dashboard.welcome_en': 'Welcome to SHIFTPRO',
     'dashboard.greeting_morning': 'صباح الخير',
     'dashboard.greeting_noon': 'نهارك سعيد',
     'dashboard.greeting_evening': 'مساء الخير',
@@ -546,7 +546,7 @@
     'notifsheet.h_16': '16 ساعة',
     'notifsheet.save': 'حفظ التذكيرات',
     'notifsheet.saved_toast': 'تم حفظ التذكيرات والإشعارات',
-    'notifsheet.granted_toast': 'تم تفعيل إشعارات ShiftPro',
+    'notifsheet.granted_toast': 'تم تفعيل إشعارات SHIFTPRO',
     'notifsheet.denied_toast': 'لم يتم منح إذن الإشعارات',
     'notifsheet.module_missing': 'موديول الإشعارات غير متاح',
 
@@ -653,7 +653,7 @@
     'backup.deleted_all': 'تم حذف جميع البيانات',
 
     // ====== ورقة: عن التطبيق ======
-    'about.title': 'عن ShiftPro',
+    'about.title': 'عن SHIFTPRO',
     'about.sub': 'إدارة وردياتك وحضورك ومستحقاتك في مكان واحد',
     'about.version': 'الإصدار',
     'about.offline': 'يعمل بدون إنترنت',
@@ -689,7 +689,7 @@
     'about.privacy_intro': 'صُمم الإصدار الحالي للاحتفاظ بسجلات العمل محليًا على جهازك، وليس لإرسال الحضور والرواتب تلقائيًا إلى خادم سحابي خاص بالتطبيق.',
     'about.privacy_storage': 'يخزن التطبيق المعلومات التي تدخلها مثل بيانات الملف الشخصي والورديات والحضور والإجازات وإعدادات الراتب في مساحة التخزين المحلية للتطبيق أو المتصفح على جهازك.',
     'about.privacy_no_account_title': 'لا يوجد حساب سحابي في الإصدار الحالي',
-    'about.privacy_no_account': 'لا تحتاج وظائف التطبيق الحالية إلى إنشاء حساب على خادم ShiftPro، ولا تُرفع سجلاتك تلقائيًا للمزامنة بين الأجهزة.',
+    'about.privacy_no_account': 'لا تحتاج وظائف التطبيق الحالية إلى إنشاء حساب على خادم SHIFTPRO، ولا تُرفع سجلاتك تلقائيًا للمزامنة بين الأجهزة.',
     'about.privacy_backup': 'قد تحتوي النسخة الاحتياطية على معلومات شخصية وبيانات حضور ورواتب. خزّن الملف في مكان موثوق، ولا ترسله إلى شخص غير مخوّل، وتذكّر أن حذف التطبيق أو بيانات المتصفح قد يؤدي إلى فقدان البيانات المحلية.',
     'about.privacy_device_title': 'حماية الجهاز',
     'about.privacy_device': 'استخدم قفل شاشة قويًا وحدّث نظام جهازك، ولا تتركه مفتوحًا دون مراقبة. التطبيق لا يفرض قفلًا مستقلًا على الجهاز ولا يضمن تشفير ملفات النسخ الاحتياطي.',
@@ -800,16 +800,16 @@
     'notif.daily_body': 'سجلت {hours}، إضافي {overtime}، متوقع {value}',
 
     // ====== PWA / التثبيت ======
-    'pwa.install_title': 'تثبيت ShiftPro',
+    'pwa.install_title': 'تثبيت SHIFTPRO',
     'pwa.install_body': 'أضف التطبيق لشاشتك الرئيسية',
     'pwa.install_btn': 'تثبيت',
     'pwa.installed': 'تم تثبيت التطبيق',
-    'pwa.installed_toast': 'تم تثبيت ShiftPro!',
+    'pwa.installed_toast': 'تم تثبيت SHIFTPRO!',
     'pwa.installing': 'جاري التثبيت...',
     'pwa.manual_hint': 'افتح قائمة المتصفح واختر «إضافة للشاشة الرئيسية»',
 
     // ====== Onboarding ======
-    'onboard.welcome_title': 'أهلاً بك في ShiftPro',
+    'onboard.welcome_title': 'أهلاً بك في SHIFTPRO',
     'onboard.welcome_body': 'تطبيق متكامل لإدارة الورديات والحضور والرواتب — كل شيء محلي على جهازك بدون أي خادم.',
     'onboard.start': 'لنبدأ',
     'onboard.skip': 'تخطٍ',
